@@ -1,0 +1,197 @@
+<app-menu></app-menu>
+
+<div class="ion-page" id="main-content">
+  <ion-header>
+    <ion-toolbar>
+      <ion-buttons slot="start">
+        <ion-menu-button>
+          <ion-icon [src]="'../../../assets/icon/menu.svg'"></ion-icon>
+        </ion-menu-button>
+      </ion-buttons>
+
+      <ion-title class="ion-text-center">
+        <ion-img [src]="'../../../assets/icon/marvel.svg'" class="img-center"></ion-img>
+      </ion-title>
+
+      <ion-buttons slot="end">
+        <ion-button (click)="showSearchBox()">
+          <ion-icon slot="icon-only" name="search"></ion-icon>
+        </ion-button>
+
+        <ion-searchbar *ngIf="showSearch" [(ngModel)]="searchTerm" (ionChange)="searchItems()" placeholder="Busca Perssoas" [hidden]="!showSearch" inputmode="text" type="text"></ion-searchbar>
+      </ion-buttons>
+    </ion-toolbar>
+  </ion-header>
+
+  <ion-content class="ion-padding">
+    <ion-text>
+      <p class="subtituloGrande">
+        Ben vindo ao Marvel Heroes
+      </p>
+      <h1>
+        <strong class="textoGrande">
+          Escolha o seu personagem
+        </strong>
+      </h1>
+    </ion-text>
+    <ion-list class="listaHeroes">
+        <ion-card [className]="'tarjeta resultList'" *ngFor="let result of results" (click)="llamar(result)">
+          <ion-img [src]="'./../../../assets/'+result.imagePath"></ion-img>
+          <ion-card-header>
+          </ion-card-header>
+          <ion-card-content class="card-content-bottom">
+            <p>
+              {{result.alterEgo}}
+            </p>
+            <h3>
+              <strong>
+                {{result.name}}
+              </strong>
+            </h3>
+          </ion-card-content>
+        </ion-card>    
+    </ion-list>
+    <ion-list>
+      <div class="item1" (click)="filtrar('heroe')">
+        <ion-icon [src]="'../../../assets/icon/hero.svg'"></ion-icon>
+      </div>
+
+      <div class="item2" (click)="filtrar('villano')">
+        <ion-icon [src]="'../../../assets/icon/villain.svg'"></ion-icon>
+      </div>
+
+      <div class="item3" (click)="filtrar('antiheroe')">
+        <ion-icon [src]="'../../../assets/icon/antihero.svg'"></ion-icon>
+      </div>
+
+      <div class="item4" (click)="filtrar('alien')">
+        <ion-icon [src]="'../../../assets/icon/alien.svg'"></ion-icon>
+      </div>
+      <div class="item5" (click)="filtrar('humano')">
+        <ion-icon [src]="'../../../assets/icon/human.svg'"></ion-icon>
+      </div>
+    </ion-list>
+
+    <div [className]="'itemHeroes'">
+      <ion-text color="danger">
+        <h4>Heroís</h4>
+        <p (click)="filtrar('todo')">Ver tudo</p>
+      </ion-text>
+      <ion-list [className]="'listaHeroes'">
+        <ion-card [className]="'tarjeta d-block'" *ngFor="let heroe of heroes" (click)="llamar(heroe)">
+          <ion-img [src]="'./../../../assets/'+heroe.imagePath"></ion-img>
+          <ion-card-header>
+          </ion-card-header>
+          <ion-card-content class="card-content-bottom">
+            <p>
+              {{heroe.alterEgo}}
+            </p>
+            <h3>
+              <strong>
+                {{heroe.name}}
+              </strong>
+            </h3>
+          </ion-card-content>
+        </ion-card>
+      </ion-list>
+    </div>
+    <div [className]="'itemVillanos'">
+      <ion-text color="danger">
+        <h4>Vilóes</h4>
+        <p (click)="filtrar('todo')">Ver tudo</p>
+
+      </ion-text>
+      <ion-list [className]="'listaHeroes'">
+        <ion-card [className]="'tarjeta d-block'" *ngFor="let heroe of viloes" (click)="llamar(heroe)">
+          <ion-img [src]="'./../../../assets/'+heroe.imagePath"></ion-img>
+          <ion-card-header>
+          </ion-card-header>
+          <ion-card-content class="card-content-bottom">
+            <p>
+              {{heroe.alterEgo}}
+            </p>
+            <h3>
+              <strong>
+                {{heroe.name}}
+              </strong>
+            </h3>
+          </ion-card-content>
+        </ion-card>
+      </ion-list>
+    </div>
+    <div [className]="'itemAntiheroe'">
+      <ion-text color="danger">
+        <h4>Antiherois</h4>
+        <p (click)="filtrar('todo')">Ver tudo</p>
+
+      </ion-text>
+      <ion-list [className]="'listaHeroes'">
+        <ion-card [className]="'tarjeta d-block'" *ngFor="let heroe of antiheroes" (click)="llamar(heroe)">
+          <ion-img [src]="'./../../../assets/'+heroe.imagePath"></ion-img>
+          <ion-card-header>
+          </ion-card-header>
+          <ion-card-content class="card-content-bottom">
+            <p>
+              {{heroe.alterEgo}}
+            </p>
+            <h3>
+              <strong>
+                {{heroe.name}}
+              </strong>
+            </h3>
+          </ion-card-content>
+        </ion-card>
+      </ion-list>
+    </div>
+    <div [className]="'itemAliens'">
+      <ion-text color="danger">
+        <h4>Aliens</h4>
+        <p (click)="filtrar('todo')">Ver tudo</p>
+
+      </ion-text>
+      <ion-list [className]="'listaHeroes'">
+        <ion-card [className]="'tarjeta d-block'" *ngFor="let heroe of aliens" (click)="llamar(heroe)">
+          <ion-img [src]="'./../../../assets/'+heroe.imagePath"></ion-img>
+          <ion-card-header>
+          </ion-card-header>
+          <ion-card-content class="card-content-bottom">
+            <p>
+              {{heroe.alterEgo}}
+            </p>
+            <h3>
+              <strong>
+                {{heroe.name}}
+              </strong>
+            </h3>
+          </ion-card-content>
+        </ion-card>
+      </ion-list>
+    </div>
+    <div [className]="'itemHumanos'">
+      <ion-text color="danger">
+        <h4>Humans</h4>
+        <p (click)="filtrar('todo')">Ver tudo</p>
+
+      </ion-text>
+      <ion-list [className]="'listaHeroes'">
+        <ion-card [className]="'tarjeta d-block'" *ngFor="let heroe of humanos" (click)="llamar(heroe)">
+          <ion-img [src]="'./../../../assets/'+heroe.imagePath"></ion-img>
+          <ion-card-header>
+          </ion-card-header>
+          <ion-card-content class="card-content-bottom">
+            <p>
+              {{heroe.alterEgo}}
+            </p>
+            <h3>
+              <strong>
+                {{heroe.name}}
+              </strong>
+            </h3>
+          </ion-card-content>
+        </ion-card>
+      </ion-list>
+    </div>
+  </ion-content>
+</div>
+
+////////////
