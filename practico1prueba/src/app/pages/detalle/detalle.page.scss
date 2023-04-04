@@ -1,0 +1,135 @@
+ion-toolbar {
+  --opacity: 0.5;
+  position: absolute;
+}
+
+//prefers dark
+@media (prefers-color-scheme: dark) {
+    .imagenPantalla {
+        &::before {
+          content: "";
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+      
+          background: linear-gradient(
+            0deg,
+            rgb(30,30,30),
+            #737373ad,
+            transparent,
+            transparent
+          );
+        }
+      }
+      
+
+}
+ 
+@media (prefers-color-scheme: light) {
+  
+    .imagenPantalla {
+        &::before {
+          content: "";
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+      
+          background: linear-gradient(
+            0deg,
+            white,
+            #ffffffd6,
+            transparent,
+            transparent
+          );
+        }
+      }
+      
+}
+.imagencontainer {
+  position: relative;
+}
+ion-text {
+  font-family: "gilroy-regular";
+  font-size: 18px;
+  // color: rgb(169, 169, 169);
+  h1 {
+    font-family: "gilroy-heavy";
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    width: 1rem;
+    font-size: 40px;
+    //   color: white;
+  }
+}
+.contenido {
+  position: absolute;
+  width: 100%;
+  bottom: 0%;
+  margin-top: -10rem;
+  padding-left: 1rem;
+}
+.dentroDeLista {
+  display: flex;
+  flex-direction: row;
+  row-gap: -10px;
+  justify-content: space-around;
+  padding-right: 2rem;
+  div {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 5rem;
+    ion-icon {
+      font-size: 2rem;
+    }
+    p {
+      font-family: "gilroy-regular";
+      font-size: 14px;
+    }
+  }
+}
+.biography {
+  font-size: 14px;
+  font-family: "gilroy-medium";
+  // color: white;
+  h2 {
+    font-family: "gilroy-bold";
+  }
+}
+.listaVirtudes {
+  ion-item {
+    p {
+      width: 10rem;
+      font-family: "gilroy-regular";
+      //  color: rgb(205, 205, 205);
+    }
+  }
+}
+.listaTarjeta {
+  display: flex;
+  flex-direction: row;
+  overflow-x: scroll;
+  .tarjeta {
+    min-width: 10rem;
+  }
+}
+ion-progress-bar {
+    height: 0.5rem;
+  &::before {
+    content: "";
+    position: absolute;
+    background: repeating-linear-gradient(to right,
+      rgba(0, 0, 0, 0) 3px,
+      white 6px
+    );
+    height: 110%;
+    width: 100%;
+    z-index: 3;
+  }
+}
