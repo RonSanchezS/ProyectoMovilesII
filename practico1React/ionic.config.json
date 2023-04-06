@@ -1,0 +1,7 @@
+{
+  "name": "practico1React",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "react"
+}
