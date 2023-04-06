@@ -497,23 +497,19 @@ export class InicioPage implements OnInit {
   constructor(
     private router: Router,
     private renderer: Renderer2,
-    private elementref: ElementRef,
-    private http: HttpClient
-  ) {
+    private elementref: ElementRef
+      ) {
     this.buscar();
   }
   searchTerm: string = '';
   results: any[] = [];
   searchItems() {
     this.searchTerm = this.searchTerm.trim();
-    console.log("Buscando "+this.searchTerm);
-    console.log("En la lista "+this.personajes);
     this.results = this.personajes.filter((item) => {
       return (
         item.name.toLowerCase().indexOf(this.searchTerm.toLowerCase()) > -1
       );
     });
-    console.log(this.results);
   }
   ngOnInit() {}
   onSearchChange(event: any) {
