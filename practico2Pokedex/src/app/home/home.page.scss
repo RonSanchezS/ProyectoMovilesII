@@ -1,0 +1,153 @@
+lista-cartas{
+  overflow: visible;
+}
+
+.card-pokemon{
+  height: 10rem;
+  border-radius: 1rem;
+  display: flex;
+  gap: 5rem;
+  position: relative;
+}
+.contenidoizquierda{
+  display: flex;
+  overflow: visible;
+justify-content: center;
+}
+.contenidoderecha{
+  display: flex;
+  position: absolute;
+  right: 0%;
+  --overflow: visible;
+}
+.listaElementos{
+  display: flex;
+  gap: 1rem;
+}
+.listaTipos{
+  border-radius: 3px;
+
+}
+.spritePokemon2{
+  position: absolute;
+  right: 0%;
+  width: 10rem;
+  height: 10rem;
+  --overflow: visible;
+  z-index: 100;
+}
+.iconoRaro{
+  position: absolute;
+  right: 14rem;
+  top: 0;
+  width: 5rem;
+  height: 5rem;
+  --overflow: visible;
+}
+.pokeboll{
+  position: absolute;
+  left: -8rem;
+  width: 10rem;
+  height: 10rem;
+  --overflow: visible;
+ 
+}
+
+//modal sort
+.listaSort{
+  display: flex;
+  flex-direction: column;
+  overflow: visible;
+  ion-button{
+    --background-activated : rgb(234,93,96);
+  }
+  overflow: visible;
+}
+
+//////////////////////MODAL FILTER////////////////////
+
+.listaFiltros{
+  display: flex;
+  flex-direction: row;
+  justify-content: start;
+  overflow: scroll;
+}
+
+.itemFilter{
+  position: relative;
+  overflow: visible;
+}
+
+.wrapperBoton{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  position: absolute;
+  width: 3rem;
+  height: 3rem;
+}
+
+.toggleFilter{
+  opacity: 0;
+}
+
+.noscroll{
+  overflow: hidden;
+}
+
+// ion-card-title{
+//   font-size: 26px;
+// }
+// ion-card-subtitle{
+//   font-size: 12px;
+// }
+// ion-card{
+//   margin: 0px 3.5rem ;
+// }
+// .lista-cartas{
+//   display: flex;
+//   flex-direction: column;
+//   gap: 2rem;
+//   position: relative;
+//   .listaElementos{
+//     display: flex;
+//     flex-direction: row;
+//     gap: 1rem;
+//   }
+//   .card-pokemon{
+//     height: 10rem;
+//     border-radius: 1rem;
+//     display: flex;
+//     gap: 5rem;
+//   }
+// }
+// .listaTipos{
+//  --border-radius: 3px;
+// overflow: hidden;
+
+// }
+
+// ion-item{
+//   overflow: visible;
+// }
+
+// .card-pokemon ion-card-header,
+// .card-pokemon ion-card-content {
+//   width: 50%;
+// }
+// .contenidoderecha{
+//   display: flex;
+//   width: 50%;
+// }
+// .contenidoizquierda{
+//   display: flex;
+//   width: 50%;
+
+// }
+// .spritePokemon2{
+//   z-index: 100;
+//   width: 20rem;
+//   height: 20rem;
+//   position: absolute;
+// }
