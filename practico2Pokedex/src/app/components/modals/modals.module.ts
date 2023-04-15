@@ -4,6 +4,9 @@ import { SortComponent } from './sort/sort.component';
 import { GenerationComponent } from './generation/generation.component';
 import { FilterComponent } from './filter/filter.component';
 import { IonicModule } from '@ionic/angular';
+import { AboutComponent } from './about/about.component';
+import { StatsComponent } from './stats/stats.component';
+import { EvolutionComponent } from './evolution/evolution.component';
 
 
 
@@ -11,7 +14,10 @@ import { IonicModule } from '@ionic/angular';
   declarations: [
     SortComponent,
     GenerationComponent,
-    FilterComponent
+    FilterComponent,
+    AboutComponent,
+    StatsComponent,
+    EvolutionComponent,
   ],
   imports: [
     CommonModule, IonicModule
@@ -19,6 +25,11 @@ import { IonicModule } from '@ionic/angular';
   exports: [
     SortComponent,
     GenerationComponent,
-    FilterComponent]
+    AboutComponent,
+    StatsComponent,
+    EvolutionComponent,
+    FilterComponent,
+    AboutComponent
+  ]
 })
 export class ModalsModule { }

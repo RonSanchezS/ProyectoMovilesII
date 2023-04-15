@@ -1,0 +1,131 @@
+ion-toolbar {
+  --background: aliceblue;
+}
+ion-back-button {
+  z-index: 1000;
+}
+ion-buttons {
+  z-index: 1000;
+}
+.textoGigante {
+  position: absolute;
+  top: -2rem;
+  font-size: 8rem;
+  z-index: 50;
+  -webkit-text-stroke: 2px white;
+  color: transparent;
+  pointer-events: none;
+  overflow: hidden;
+  height: 200px;
+}
+.card-container {
+  position: relative;
+  &::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+      0deg,
+      rgb(139, 190, 138) 50%,
+      rgba(139, 190, 138, 0.43) 100%
+    );
+    z-index: 51;
+    pointer-events: none;
+  }
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  padding-top: 3.5rem;
+  padding-bottom: 1.5rem;
+
+  ion-img {
+    width: 8rem;
+    z-index: 1100;
+  }
+  div {
+    z-index: 51;
+    display: flex;
+    flex-direction: column;
+
+    h3 {
+      font-size: 1.5rem;
+      font-weight: bold;
+      margin: 0;
+      z-index: 1100;
+      z-index: 51;
+    }
+    div {
+      display: flex;
+      flex-direction: row;
+
+      div {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: center;
+        margin: 3px;
+        padding: 2px;
+        border-radius: 3px;
+        ion-icon {
+          padding-left: 10px;
+        }
+      }
+    }
+  }
+}
+ion-header{
+    &::after{
+        background-image: none;
+    }
+}
+ion-button{
+    --color: rgb(255, 255, 255);
+}
+.listaCondicional{
+  position: sticky;
+  top: 0;
+    display: flex;  
+    flex-direction: row;
+    justify-content: space-evenly;
+    align-items: center;
+    z-index: 10;
+    margin-top: -2px;
+    h4{
+        font-size: 1rem;
+        margin: 0;
+    }
+    
+}
+#cartaInferior{
+  border-radius: 2rem;
+
+}
+.containerPaginas{
+  position: relative;
+  .pokeballIconoPaginas{
+    position: absolute;
+    width: 6rem;
+    height: 6rem;
+    left: 0;
+    opacity: 0.5;
+    &::after{
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(
+        to left,
+        rgb(139, 190, 138) 0%,
+        rgba(139, 190, 138, 0.43) 100%
+      );
+      z-index: 51;
+      pointer-events: none;
+    }
+  }
+}

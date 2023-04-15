@@ -1,5 +1,5 @@
-import { Component } from '@angular/core';
-import { IonicModule } from '@ionic/angular';
+import { Component, ViewChild } from '@angular/core';
+import { IonModal, IonicModule } from '@ionic/angular';
 import { PokeApiService } from '../services/poke-api.service';
 import { HttpClientModule } from '@angular/common/http';
 import { Pokedex, Result } from '../models/Pokedex';
@@ -9,39 +9,44 @@ import { forkJoin, switchMap } from 'rxjs';
 import { Router } from '@angular/router';
 import { ModalsModule } from '../components/modals/modals.module';
 
-
 @Component({
   selector: 'app-home',
   templateUrl: 'home.page.html',
   styleUrls: ['home.page.scss'],
   standalone: true,
-  imports: [
-    IonicModule,
-    CommonModule,
-    HttpClientModule,
-    ModalsModule],
+  imports: [IonicModule, CommonModule, HttpClientModule, ModalsModule],
   providers: [PokeApiService],
 })
 export class HomePage {
+
+  @ViewChild(IonModal) modal: IonModal | undefined;
+
+
   pokedex: Pokedex | null = null;
 
-  pokedexTipos : Pokedex | null = null;
+  pokedexTipos: Pokedex | null = null;
 
   pokedexResults: Result[] | null = null;
   listaPokemon: Pokemon[] | null = null;
   listaMostrados: Pokemon[] | null = null;
   loading: Boolean = true;
 
-  tiposPokemon : string[] = [];
+  tiposPokemon: string[] = [];
   /////////////////////////////MODAL SORT
 
   ///////////////////////////////////
 
-  filtrosSet : Set<String> = new Set<String>();
-  filtrosSetDebilidades : Set<String> = new Set<String>();
+  filtrosSet: Set<String> = new Set<String>();
+  filtrosSetDebilidades: Set<String> = new Set<String>();
   constructor(private api: PokeApiService, private router: Router) {
-    api
-      .getListaPokemon()
+    this.getDatosIniciales();
+  }
+  pokemonDetalle(id: number) {
+    this.router.navigate(['/pokemon-detalle', id]);
+  }
+  getDatosIniciales() {
+    this.api
+      .getListaPokemon(50, 0)
       .pipe(
         switchMap((data) => {
           this.pokedex = data;
@@ -58,17 +63,12 @@ export class HomePage {
         this.listaMostrados = this.listaPokemon;
         this.loading = false;
       });
-    api.getTiposDePokemon().subscribe((data : Pokedex) => {
-        data.results.forEach(element => {
-          this.tiposPokemon.push(element.name);
-        });
-        console.log(this.tiposPokemon);
-      }
-    
-    );
-  }
-  pokemonDetalle(id: number) {
-    this.router.navigate(['/pokemon-detalle', id]);
+    this.api.getTiposDePokemon().subscribe((data: Pokedex) => {
+      data.results.forEach((element) => {
+        this.tiposPokemon.push(element.name);
+      });
+      console.log(this.tiposPokemon);
+    });
   }
   filterByType(type: string) {
     if (this.listaPokemon) {
@@ -203,9 +203,67 @@ export class HomePage {
         return { '--background': 'white' };
     }
   }
-  
+
+  rangeChange(event: any) {
+    console.log(event.detail);
+    this.api
+    .getListaPokemonPorEvento(event)
+    .pipe(
+      switchMap((data) => {
+        this.pokedex = data;
+        this.pokedexResults = data.results;
+        return forkJoin(
+          data.results.map((pokemon) => {
+            return this.api.getPokemonIndividual(pokemon.url);
+          })
+        );
+      })
+    )
+    .subscribe((data) => {
+      this.listaPokemon = data;
+      this.listaMostrados = this.listaPokemon;
+      this.loading = false;
+    });
+   
+  }
+  cancel() {
+    if(this.modal)
+    this.modal.dismiss(null, 'cancel');
+  }
+  confirm(){
+    if(this.modal)
+    this.modal.dismiss(null, 'ok');
+  }
+  filterByHeight(minHeight: number, maxHeight: number): void {
+    if (this.listaPokemon) {
+      this.listaMostrados = this.listaPokemon.filter(
+        (pokemon) => pokemon.height >= minHeight && pokemon.height <= maxHeight
+      );
+    }
+  }
+  filterByWeight(minWeight: number, maxWeight: number): void {
+    if (this.listaPokemon) {
+      this.listaMostrados = this.listaPokemon.filter(
+        (pokemon) => pokemon.weight >= minWeight && pokemon.weight <= maxWeight
+      );
+    }
+  }
+
+
+  onSearchChange(event: any) {
+    if (this.listaPokemon) {
+      this.listaMostrados = this.listaPokemon.filter((pokemon) =>
+        pokemon.name.toLowerCase().includes(event.detail.value.toLowerCase())
+      );
+    }
+  }
+
   toggleChanged(event: any, tipoPokemon: string) {
-    if(tipoPokemon=="light"||tipoPokemon=="medium"||tipoPokemon=="heavy"){
+    if (
+      tipoPokemon == 'light' ||
+      tipoPokemon == 'medium' ||
+      tipoPokemon == 'heavy'
+    ) {
       if (event.detail.checked == false) {
         this.listaMostrados = this.listaPokemon;
         this.filtrosSet.delete(tipoPokemon);
@@ -213,32 +271,27 @@ export class HomePage {
       } else {
         this.filtrosSet.add(tipoPokemon);
         if (this.listaPokemon) {
-        switch (tipoPokemon) {
-          case "light":
-            this.listaMostrados = this.listaPokemon.filter((pokemon) => {
-              return pokemon.weight <= 100;
-            }
-            );
-            break;
-          case "medium":
-            this.listaMostrados = this.listaPokemon.filter((pokemon) => {
-              return pokemon.weight > 100 && pokemon.weight < 200;
-            }
-            );
-            break;
-          case "heavy":
-            this.listaMostrados = this.listaPokemon.filter((pokemon) => {
-              return pokemon.weight >= 200;
-            }
-            );
-        }
-          
+          switch (tipoPokemon) {
+            case 'light':
+              this.filterByWeight(0, 100);
+              break;
+            case 'medium':
+              this.filterByWeight(100, 200);
+              break;
+            case 'heavy':
+              this.filterByWeight(200, Infinity);
+              break;
+          }
         }
         console.log(this.filtrosSet);
       }
       return;
     }
-    if(tipoPokemon=="short"||tipoPokemon=="normalsize"||tipoPokemon=="tall"){
+    if (
+      tipoPokemon == 'short' ||
+      tipoPokemon == 'normalsize' ||
+      tipoPokemon == 'tall'
+    ) {
       if (event.detail.checked == false) {
         this.listaMostrados = this.listaPokemon;
         this.filtrosSet.delete(tipoPokemon);
@@ -246,26 +299,17 @@ export class HomePage {
       } else {
         this.filtrosSet.add(tipoPokemon);
         if (this.listaPokemon) {
-        switch (tipoPokemon) {
-          case "short":
-            this.listaMostrados = this.listaPokemon.filter((pokemon) => {
-              return pokemon.height <= 10;
-            }
-            );
-            break;
-          case "normalsize":
-            this.listaMostrados = this.listaPokemon.filter((pokemon) => {
-              return pokemon.height > 10 && pokemon.height < 20;
-            }
-            );
-            break;
-          case "tall":
-            this.listaMostrados = this.listaPokemon.filter((pokemon) => {
-              return pokemon.height >= 20;
-            }
-            );
-        }
-          
+          switch (tipoPokemon) {
+            case 'short':
+              this.filterByHeight(0, 10);
+              break;
+            case 'normalsize':
+              this.filterByHeight(11, 19);
+              break;
+            case 'tall':
+              this.filterByHeight(20, Infinity);
+              break;
+          }
         }
         console.log(this.filtrosSet);
       }
@@ -277,60 +321,144 @@ export class HomePage {
       console.log(this.filtrosSet);
     } else {
       this.filtrosSet.add(tipoPokemon);
-      if (this.listaPokemon) { 
+      if (this.listaPokemon) {
         this.listaMostrados = this.listaPokemon.filter((pokemon) => {
-          if(this.filtrosSet.has('light')){
-            if(this.filtrosSet.has('short')){
-              return pokemon.types.some((tipo) => this.filtrosSet.has(tipo.type.name)) && pokemon.weight <= 100 && pokemon.height <= 10;
-            } else if(this.filtrosSet.has('normalsize')){
-              return pokemon.types.some((tipo) => this.filtrosSet.has(tipo.type.name)) && pokemon.weight <= 100 && pokemon.height > 10 && pokemon.height < 20;
-            } else if(this.filtrosSet.has('tall')){
-              return pokemon.types.some((tipo) => this.filtrosSet.has(tipo.type.name)) && pokemon.weight <= 100 && pokemon.height >= 20;
+          if (this.filtrosSet.has('light')) {
+            if (this.filtrosSet.has('short')) {
+              return (
+                pokemon.types.some((tipo) =>
+                  this.filtrosSet.has(tipo.type.name)
+                ) &&
+                pokemon.weight <= 100 &&
+                pokemon.height <= 10
+              );
+            } else if (this.filtrosSet.has('normalsize')) {
+              return (
+                pokemon.types.some((tipo) =>
+                  this.filtrosSet.has(tipo.type.name)
+                ) &&
+                pokemon.weight <= 100 &&
+                pokemon.height > 10 &&
+                pokemon.height < 20
+              );
+            } else if (this.filtrosSet.has('tall')) {
+              return (
+                pokemon.types.some((tipo) =>
+                  this.filtrosSet.has(tipo.type.name)
+                ) &&
+                pokemon.weight <= 100 &&
+                pokemon.height >= 20
+              );
             } else {
-            return pokemon.types.some((tipo) => this.filtrosSet.has(tipo.type.name)) && pokemon.weight <= 100;
+              return (
+                pokemon.types.some((tipo) =>
+                  this.filtrosSet.has(tipo.type.name)
+                ) && pokemon.weight <= 100
+              );
             }
-          } else if(this.filtrosSet.has('medium')){
-            if(this.filtrosSet.has('short')){
-              return pokemon.types.some((tipo) => this.filtrosSet.has(tipo.type.name)) && pokemon.weight > 100 && pokemon.weight < 200 && pokemon.height <= 10;
-            } else if(this.filtrosSet.has('normalsize')){
-              return pokemon.types.some((tipo) => this.filtrosSet.has(tipo.type.name)) && pokemon.weight > 100 && pokemon.weight < 200 && pokemon.height > 10 && pokemon.height < 20;
-            } else if(this.filtrosSet.has('tall')){
-              return pokemon.types.some((tipo) => this.filtrosSet.has(tipo.type.name)) && pokemon.weight > 100 && pokemon.weight < 200 && pokemon.height >= 20;
+          } else if (this.filtrosSet.has('medium')) {
+            if (this.filtrosSet.has('short')) {
+              return (
+                pokemon.types.some((tipo) =>
+                  this.filtrosSet.has(tipo.type.name)
+                ) &&
+                pokemon.weight > 100 &&
+                pokemon.weight < 200 &&
+                pokemon.height <= 10
+              );
+            } else if (this.filtrosSet.has('normalsize')) {
+              return (
+                pokemon.types.some((tipo) =>
+                  this.filtrosSet.has(tipo.type.name)
+                ) &&
+                pokemon.weight > 100 &&
+                pokemon.weight < 200 &&
+                pokemon.height > 10 &&
+                pokemon.height < 20
+              );
+            } else if (this.filtrosSet.has('tall')) {
+              return (
+                pokemon.types.some((tipo) =>
+                  this.filtrosSet.has(tipo.type.name)
+                ) &&
+                pokemon.weight > 100 &&
+                pokemon.weight < 200 &&
+                pokemon.height >= 20
+              );
             } else {
-            return pokemon.types.some((tipo) => this.filtrosSet.has(tipo.type.name)) && pokemon.weight > 100 && pokemon.weight < 200;
+              return (
+                pokemon.types.some((tipo) =>
+                  this.filtrosSet.has(tipo.type.name)
+                ) &&
+                pokemon.weight > 100 &&
+                pokemon.weight < 200
+              );
             }
-          } else if(this.filtrosSet.has('heavy')){
-            if(this.filtrosSet.has('short')){
-              return pokemon.types.some((tipo) => this.filtrosSet.has(tipo.type.name)) && pokemon.weight >= 200 && pokemon.height <= 10;
-            } else if(this.filtrosSet.has('normalsize')){
-              return pokemon.types.some((tipo) => this.filtrosSet.has(tipo.type.name)) && pokemon.weight >= 200 && pokemon.height > 10 && pokemon.height < 20;
-            } else if(this.filtrosSet.has('tall')){
-              return pokemon.types.some((tipo) => this.filtrosSet.has(tipo.type.name)) && pokemon.weight >= 200 && pokemon.height >= 20;
+          } else if (this.filtrosSet.has('heavy')) {
+            if (this.filtrosSet.has('short')) {
+              return (
+                pokemon.types.some((tipo) =>
+                  this.filtrosSet.has(tipo.type.name)
+                ) &&
+                pokemon.weight >= 200 &&
+                pokemon.height <= 10
+              );
+            } else if (this.filtrosSet.has('normalsize')) {
+              return (
+                pokemon.types.some((tipo) =>
+                  this.filtrosSet.has(tipo.type.name)
+                ) &&
+                pokemon.weight >= 200 &&
+                pokemon.height > 10 &&
+                pokemon.height < 20
+              );
+            } else if (this.filtrosSet.has('tall')) {
+              return (
+                pokemon.types.some((tipo) =>
+                  this.filtrosSet.has(tipo.type.name)
+                ) &&
+                pokemon.weight >= 200 &&
+                pokemon.height >= 20
+              );
             } else {
-            return pokemon.types.some((tipo) => this.filtrosSet.has(tipo.type.name)) && pokemon.weight >= 200;
+              return (
+                pokemon.types.some((tipo) =>
+                  this.filtrosSet.has(tipo.type.name)
+                ) && pokemon.weight >= 200
+              );
             }
           } else {
-            return pokemon.types.some((tipo) => this.filtrosSet.has(tipo.type.name)); // Devuelve un valor predeterminado en caso de que ninguna de las condiciones se cumpla
+            return pokemon.types.some((tipo) =>
+              this.filtrosSet.has(tipo.type.name)
+            ); // Devuelve un valor predeterminado en caso de que ninguna de las condiciones se cumpla
           }
         });
-       
-        if(this.filtrosSet.has('short')){
+
+        if (this.filtrosSet.has('short')) {
           this.listaMostrados = this.listaPokemon.filter((pokemon) => {
-            return pokemon.types.some((tipo) =>
-              this.filtrosSet.has(tipo.type.name)
-            ) && pokemon.height <= 10;
+            return (
+              pokemon.types.some((tipo) =>
+                this.filtrosSet.has(tipo.type.name)
+              ) && pokemon.height <= 10
+            );
           });
-        }else if(this.filtrosSet.has('normalsize')){
+        } else if (this.filtrosSet.has('normalsize')) {
           this.listaMostrados = this.listaPokemon.filter((pokemon) => {
-            return pokemon.types.some((tipo) =>
-              this.filtrosSet.has(tipo.type.name)
-            ) && pokemon.height > 10 && pokemon.height < 20;
+            return (
+              pokemon.types.some((tipo) =>
+                this.filtrosSet.has(tipo.type.name)
+              ) &&
+              pokemon.height > 10 &&
+              pokemon.height < 20
+            );
           });
-        }else if(this.filtrosSet.has('tall')){
+        } else if (this.filtrosSet.has('tall')) {
           this.listaMostrados = this.listaPokemon.filter((pokemon) => {
-            return pokemon.types.some((tipo) =>
-              this.filtrosSet.has(tipo.type.name)
-            ) && pokemon.height >= 20;
+            return (
+              pokemon.types.some((tipo) =>
+                this.filtrosSet.has(tipo.type.name)
+              ) && pokemon.height >= 20
+            );
           });
         }
       }

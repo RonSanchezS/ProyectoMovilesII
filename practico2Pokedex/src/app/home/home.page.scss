@@ -8,11 +8,13 @@ lista-cartas{
   display: flex;
   gap: 5rem;
   position: relative;
+  overflow: visible;
+  contain: none;
 }
 .contenidoizquierda{
   display: flex;
   overflow: visible;
-justify-content: center;
+  justify-content: center;
 }
 .contenidoderecha{
   display: flex;
@@ -31,8 +33,9 @@ justify-content: center;
 .spritePokemon2{
   position: absolute;
   right: 0%;
-  width: 10rem;
-  height: 10rem;
+  top: -2rem;
+  width: 12rem;
+  height: 12rem;
   --overflow: visible;
   z-index: 100;
 }
@@ -50,9 +53,10 @@ justify-content: center;
   width: 10rem;
   height: 10rem;
   --overflow: visible;
- 
 }
-
+ion-searchbar{
+  position: sticky;
+}
 //modal sort
 .listaSort{
   display: flex;
