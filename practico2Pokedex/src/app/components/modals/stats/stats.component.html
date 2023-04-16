@@ -1,0 +1,39 @@
+<ion-text>
+  <h3>Base Stats</h3>
+</ion-text>
+<ion-list>
+  <ion-item *ngFor="let item of stats">
+    <ion-text> <p>{{item.statName}}</p></ion-text>
+    <ion-text>
+      <p>{{item.baseValue}}</p>
+    </ion-text>
+    <ion-progress-bar class="progressBar" [value]="min(item.baseValue, 120) / 120"></ion-progress-bar>
+    <ion-text>
+      <p>{{item.minStat}}</p>
+    </ion-text>
+    <ion-text >
+      <p>{{item.maxStat}}</p>
+    </ion-text>
+  </ion-item>
+  <ion-item>
+    <ion-label>Total:</ion-label>
+    <ion-label>{{sumaDeStats}}</ion-label>
+    <ion-label>min</ion-label>
+    <ion-label>max</ion-label>
+  </ion-item>
+</ion-list>
+<ion-text>
+  <p>The ranges shown on the right are for a level 100 Pokémon. Maximum values are based on a beneficial nature, 252 EVs, 31 IVs; minimum values are based on a hindering nature, 0 EVs, 0 IVs.</p>
+</ion-text>
+<ion-text>
+  <h3>Type defenses</h3>
+  <p>The effectiveness of each type on {{pokemon.name}}</p>
+</ion-text>
+<ion-list *ngIf="tipoPokemon">
+  <ion-item *ngFor="let item of tipoPokemon.results">
+    <ion-icon [src]="'../../../../assets/types/'+item.name+'.svg'"></ion-icon>
+    <ion-item>
+      <ion-label>{{diccionarioDmg[item.name]}}</ion-label>
+    </ion-item>
+  </ion-item>
+</ion-list>

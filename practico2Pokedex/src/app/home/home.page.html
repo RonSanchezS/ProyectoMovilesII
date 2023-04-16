@@ -1,0 +1,187 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-buttons slot="end">
+      <ion-button id="open-generation">
+        <ion-icon slot="start"  [src]="'./assets/icons/generation.svg'"></ion-icon>
+      </ion-button>
+      <ion-button id="open-sort" >
+        <ion-icon slot="start" [src]="'./assets/icons/sort.svg'"></ion-icon>
+      </ion-button>
+      <ion-button id="open-filter">
+        <ion-icon slot="start"  [src]="'./assets/icons/filter.svg'"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+<ion-content>
+  <ion-text>
+    <h1>Pokedex</h1>
+    <p>Search for Pokémon by name or using the National Pokédex number.</p>
+  </ion-text>
+  <ion-searchbar placeholder="What Pokémon are you looking for?"(ionChange)="onSearchChange($event)" showCancelButton="always"></ion-searchbar>
+  <div *ngIf="loading">
+    <ion-spinner name="bubbles"></ion-spinner>
+  </div>
+  <div *ngIf="!loading">
+    <ion-list class="lista-cartas">
+      <ion-card class="card-pokemon" *ngFor="let resultado of listaMostrados"
+      (click)="pokemonDetalle(resultado.id)" [ngStyle]="getColorFondo(resultado.types[0].type.name)">
+        <ion-card-header class="contenidoizquierda" >
+          <ion-card-subtitle>#{{resultado.id.toString().padStart(3, '0')}}</ion-card-subtitle>
+          <ion-card-title>{{resultado.name.slice(0,1).toUpperCase() + resultado.name.slice(1)}}</ion-card-title>
+          <div  class="listaElementos">
+            <ion-item class="listaTipos" *ngFor="let item of resultado.types" [ngStyle]="getColorTipo(item.type.name)" >
+              <ion-icon class="iconoTipo" [src]="'./assets/types/'+item.type.name+'.svg'" ></ion-icon>
+              <div class="resultadoTipo" [ngStyle]="getColorTipo(item.type.name)" >{{item.type.name}}</div>
+            </ion-item>
+          </div>
+        </ion-card-header>
+        <ion-card-content class="contenidoderecha">
+        <ion-img class="spritePokemon2" [src]="resultado.sprites.other?.['official-artwork']?.front_default" [alt]="'Imagen de '+resultado.name"></ion-img>
+        <ion-icon slot="start" class="pokeboll" [ngStyle]="getColorDecoracion(resultado.types[0].type.name)" src="./assets/patterns/pokeball.svg"></ion-icon>
+        <ion-icon slot="start" class="iconoRaro" [ngStyle]="getColorDecoracion(resultado.types[0].type.name)" src="./assets/patterns/6x3.svg"></ion-icon>
+      </ion-card-content>
+      </ion-card>
+    </ion-list>
+  </div>
+  
+  <ion-modal id="modal-filter" #modal trigger="open-filter">
+    <ng-template>
+      <ion-content>
+       <ion-text>
+        <h3>Filters</h3>
+        <p>Use advanced search to explore Pokémon by type, weakness, height and more!</p>
+       </ion-text>
+       <ion-text>
+        <h4>Filters</h4>
+       </ion-text>
+       <ion-list class="listaFiltros">
+        <ion-item *ngFor="let item of tiposPokemon" class="itemFilter">
+          <div class="wrapperBoton" *ngIf="filtrosSet.has(item)" [ngStyle]="getColorFondo(item)" >
+            <ion-icon class="iconoFiltro" slot="start" [src]='"./assets/types/"+item+".svg"'>
+          </ion-icon>
+          </div>
+          <div class="wrapperBoton" *ngIf="!filtrosSet.has(item)"  >
+            <ion-icon class="iconoFiltro" slot="start" [ngStyle]="getColorDecoracion(item)" [src]='"./assets/types/"+item+".svg"'>
+          </ion-icon>
+          </div>
+          <ion-toggle class="toggleFilter" aria-label="Filtro de tipo de Pokemon para item" (ionChange)="toggleChanged($event, item)" [checked]="filtrosSet.has(item)"></ion-toggle>
+        </ion-item>
+       </ion-list>
+       <ion-text>
+        <h4>Weaknesses</h4>
+       </ion-text>
+       <ion-list class="listaFiltros">
+        <ion-item *ngFor="let item of tiposPokemon" class="itemFilter">
+          <div class="wrapperBoton" *ngIf="filtrosSetDebilidades.has(item)" [ngStyle]="getColorFondo(item)" >
+            <ion-icon class="iconoFiltro" slot="start" [src]='"./assets/types/"+item+".svg"'>
+          </ion-icon>
+          </div>
+          <div class="wrapperBoton" *ngIf="!filtrosSetDebilidades.has(item)"  >
+            <ion-icon class="iconoFiltro" slot="start" [ngStyle]="getColorDecoracion(item)" [src]='"./assets/types/"+item+".svg"'>
+          </ion-icon>
+          </div>
+          <ion-toggle class="toggleFilter" aria-label="Filtro de tipo de Pokemon para item" (ionChange)="toggleChanged($event, item)" [checked]="filtrosSetDebilidades.has(item)"></ion-toggle>
+        </ion-item>
+       </ion-list>
+       <ion-text>
+        <h4>Heights</h4>
+       </ion-text>
+       <ion-list class="listaFiltros noscroll">
+        <ion-item  class="itemFilter">
+          <div class="wrapperBoton" *ngIf="filtrosSet.has('short')" [ngStyle]="getColorFondo('fairy')" >
+            <ion-icon class="iconoFiltro" slot="start"  src="../../assets/heights/short.svg">
+          </ion-icon>
+          </div>
+          <div class="wrapperBoton" *ngIf="!filtrosSet.has('short')"  >
+            <ion-icon class="iconoFiltro" slot="start" [ngStyle]="getColorDecoracion('fairy')" src="../../assets/heights/short.svg">
+          </ion-icon>
+          </div>
+          <ion-toggle class="toggleFilter" aria-label="Filtro de tipo de Pokemon para item" (ionChange)="toggleChanged($event, 'short')" [checked]="filtrosSet.has('short')"></ion-toggle>
+        </ion-item>
+        <ion-item  class="itemFilter">
+          <div class="wrapperBoton" *ngIf="filtrosSet.has('normalsize')" [ngStyle]="getColorFondo('fairy')" >
+            <ion-icon class="iconoFiltro" slot="start"  src="../../assets/heights/medium.svg">
+          </ion-icon>
+          </div>
+          <div class="wrapperBoton" *ngIf="!filtrosSet.has('normalsize')"  >
+            <ion-icon class="iconoFiltro" slot="start" [ngStyle]="getColorDecoracion('fairy')" src="../../assets/heights/medium.svg">
+          </ion-icon>
+          </div>
+          <ion-toggle class="toggleFilter" aria-label="Filtro de tipo de Pokemon para item" (ionChange)="toggleChanged($event, 'normalsize')" [checked]="filtrosSet.has('normalsize')"></ion-toggle>
+        </ion-item>
+        <ion-item  class="itemFilter">
+          <div class="wrapperBoton" *ngIf="filtrosSet.has('tall')" [ngStyle]="getColorFondo('fairy')" >
+            <ion-icon class="iconoFiltro" slot="start"  src="../../assets/heights/tall.svg">
+          </ion-icon>
+          </div>
+          <div class="wrapperBoton" *ngIf="!filtrosSet.has('tall')"  >
+            <ion-icon class="iconoFiltro" slot="start" [ngStyle]="getColorDecoracion('fairy')" src="../../assets/heights/tall.svg">
+          </ion-icon>
+          </div>
+          <ion-toggle class="toggleFilter" aria-label="Filtro de tipo de Pokemon para item" (ionChange)="toggleChanged($event, 'tall')" [checked]="filtrosSet.has('tall')"></ion-toggle>
+        </ion-item>
+       </ion-list>
+       <ion-text>
+        <h4>Weights</h4>
+       </ion-text>
+       <ion-list class="listaFiltros noscroll">
+        
+        <ion-item  class="itemFilter">
+          <div class="wrapperBoton" *ngIf="filtrosSet.has('light')" [ngStyle]="getColorFondo('fairy')" >
+            <ion-icon class="iconoFiltro" slot="start"  src="../../assets/weights/light.svg">
+          </ion-icon>
+          </div>
+          <div class="wrapperBoton" *ngIf="!filtrosSet.has('light')"  >
+            <ion-icon class="iconoFiltro" slot="start" [ngStyle]="getColorDecoracion('fairy')" src="../../assets/weights/light.svg">
+          </ion-icon>
+          </div>
+          <ion-toggle class="toggleFilter" aria-label="Filtro de tipo de Pokemon para item" (ionChange)="toggleChanged($event, 'light')" [checked]="filtrosSet.has('light')"></ion-toggle>
+        </ion-item>
+        <ion-item  class="itemFilter">
+          <div class="wrapperBoton" *ngIf="filtrosSet.has('medium')" [ngStyle]="getColorFondo('fairy')" >
+            <ion-icon class="iconoFiltro" slot="start"  src="../../assets/weights/normal.svg">
+          </ion-icon>
+          </div>
+          <div class="wrapperBoton" *ngIf="!filtrosSet.has('medium')"  >
+            <ion-icon class="iconoFiltro" slot="start" [ngStyle]="getColorDecoracion('fairy')" src="../../assets/weights/normal.svg">
+          </ion-icon>
+          </div>
+          <ion-toggle class="toggleFilter" aria-label="Filtro de tipo de Pokemon para item" (ionChange)="toggleChanged($event, 'medium')" [checked]="filtrosSet.has('medium')"></ion-toggle>
+        </ion-item>
+        <ion-item  class="itemFilter">
+          <div class="wrapperBoton" *ngIf="filtrosSet.has('heavy')" [ngStyle]="getColorFondo('fairy')" >
+            <ion-icon class="iconoFiltro" slot="start"  src="../../assets/weights/heavy.svg">
+          </ion-icon>
+          </div>
+          <div class="wrapperBoton" *ngIf="!filtrosSet.has('heavy')"  >
+            <ion-icon class="iconoFiltro" slot="start" [ngStyle]="getColorDecoracion('fairy')" src="../../assets/weights/heavy.svg">
+          </ion-icon>
+          </div>
+          <ion-toggle class="toggleFilter" aria-label="Filtro de tipo de Pokemon para item" (ionChange)="toggleChanged($event, 'heavy')" [checked]="filtrosSet.has('heavy')"></ion-toggle>
+        </ion-item>
+       
+       </ion-list>
+       <ion-text>
+        <h4>Number Range</h4>
+       </ion-text>
+       <ion-range aria-label="Dual Knobs Range" [dualKnobs]="true" min="0" max="1279" [value]="{ lower: 1, upper: 100 }" (ionChange)="rangeChange($event)" ></ion-range>
+      </ion-content>
+      <ion-list class="listaFiltros noscroll">
+        <ion-button  expand="block"  shape="round" (click)="cancel()">
+          Reset
+        </ion-button>
+        <ion-button  expand="block" shape="round" (click)="confirm()">
+          Apply
+        </ion-button>
+      </ion-list>
+    </ng-template>
+  </ion-modal>
+
+  <app-sort></app-sort>
+
+  <app-generation></app-generation>
+
+
+
+</ion-content>
