@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, SimpleChanges } from '@angular/core';
+import { Component, ElementRef, Input, OnInit, SimpleChanges, ViewChild } from '@angular/core';
 import { Pokemon } from 'src/app/models/Pokemon';
 import { Species } from 'src/app/models/Species';
 import { PokeApiService } from 'src/app/services/poke-api.service';
@@ -27,6 +27,9 @@ export class AboutComponent implements OnInit {
   EV_YIELD: string[] = [];
   GENDER_DIST: string[] = [];
   locationEncounters : string[] = [];
+
+
+
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes['id'] && changes['id'].currentValue) {
@@ -113,7 +116,25 @@ export class AboutComponent implements OnInit {
   ngOnInit() {
     this.getTipoPokemon();
   }
+  
+  base_happiness : string = "";
+  calcularBaseHappiness(){
+    if(this.especiePokemon.base_happiness <= 5){
+      this.base_happiness = "Muy Baja";
+    }else if(this.especiePokemon.base_happiness < 15){
+      this.base_happiness = "Baja";
+    }else if(this.especiePokemon.base_happiness < 25){
+      this.base_happiness = "Media";
+    }else if(this.especiePokemon.base_happiness < 35){
+      this.base_happiness = "Alta";
+    }else{
+      this.base_happiness = "Muy Alta";
+    }
+
+  }
   getTipoPokemon() {
+    //set this.base_hapiness with a etiquette
+    this.calcularBaseHappiness()
     let tiposPokemon = this.pokemon.types.map((tipo) => {
       return tipo.type.url;
     });
@@ -131,5 +152,58 @@ export class AboutComponent implements OnInit {
         });
       });
     });
+  
   }
+
+  @Input()
+  colorTexto: string = '#FFF555';
+
+  getColorTipo(){
+    return { 'color': `${this.colorTexto}` };
+  }
+
+  getColorTipoFondo(tipo : string){
+    switch (tipo) {
+      case 'grass':
+        return { 'background-color': 'rgb(139,190,138)' };
+      case 'fire':
+        return { 'background-color': 'rgb(255,167,86)' };
+      case 'water':
+        return { 'background-color': 'rgb(88,171,246)' };
+      case 'bug':
+        return { 'background-color': 'rgb(139,214,116)' };
+      case 'normal':
+        return { 'background-color': 'rgb(181,185,196)' };
+      case 'poison':
+        return { 'background-color': 'rgb(159,110,151)' };
+      case 'electric':
+        return { 'background-color': 'rgb(242,203,85)' };
+      case 'ground':
+        return { 'background-color': 'rgb(247,133,81)' };
+      case 'fairy':
+        return { 'background-color': 'rgb(235,168,195)' };
+      case 'fighting':
+        return { 'background-color': 'rgb(235,73,113)' };
+      case 'psychic':
+        return { 'background-color': 'rgb(255,101,104)' };
+      case 'rock':
+        return { 'background-color': 'rgb(212,194,148)' };
+      case 'ghost':
+        return { 'background-color': 'rgb(133,112,190)' };
+      case 'ice':
+        return { 'background-color': 'rgb(145,216,223)' };
+      case 'dragon':
+        return { 'background-color': 'rgb(115,131,185)' };
+      case 'dark':
+        return { 'background-color': 'rgb(111,110,120)' };
+      case 'steel':
+        return { 'background-color': 'rgb(76,145,178)' };
+      case 'flying':
+        return { 'background-color': 'rgb(131,162,227)' };
+      default:
+        return { 'background-color': 'white' };
+    }
+    
+  }
+
 }

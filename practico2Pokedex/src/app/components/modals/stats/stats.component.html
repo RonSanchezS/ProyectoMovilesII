@@ -1,4 +1,4 @@
-<ion-text>
+<ion-text [ngStyle]="getColorTipo()">
   <h3>Base Stats</h3>
 </ion-text>
 <ion-list>
@@ -25,8 +25,10 @@
 <ion-text>
   <p>The ranges shown on the right are for a level 100 Pokémon. Maximum values are based on a beneficial nature, 252 EVs, 31 IVs; minimum values are based on a hindering nature, 0 EVs, 0 IVs.</p>
 </ion-text>
-<ion-text>
+<ion-text [ngStyle]="getColorTipo()">
   <h3>Type defenses</h3>
+</ion-text>
+<ion-text >
   <p>The effectiveness of each type on {{pokemon.name}}</p>
 </ion-text>
 <ion-list *ngIf="tipoPokemon">

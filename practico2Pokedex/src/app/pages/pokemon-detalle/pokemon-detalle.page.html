@@ -3,17 +3,20 @@
     <ion-buttons slot="start">
       <ion-back-button></ion-back-button>
     </ion-buttons>
+    <ion-title class="ion-text-center">{{pokemon!.name.slice(0,1).toUpperCase() + pokemon!.name.slice(1)}}</ion-title>
   </ion-toolbar>
 
 
 </ion-header>
 
-<ion-content [fullscreen]="true" *ngIf="pokemon">
+<ion-content [fullscreen]="true" *ngIf="pokemon"  scrollEvents="true" #container > 
   <ion-spinner name="bubbles" *ngIf="loading"></ion-spinner>
   <div class="card-container" *ngIf="!loading && pokemon" [ngStyle]="getColorFondo(pokemon.types[0].type.name)" >
-    <h1 class="textoGigante">{{ pokemon.name.toUpperCase() }}</h1>
-    <ion-img [src]="pokemon!.sprites.other?.['official-artwork']?.front_default"></ion-img> 
-    <div>
+
+    <div class="pinturaDeFondo" *ngIf="!loading && pokemon" [ngStyle]="getPinturaFondo(pokemon.types[0].type.name, 0, 43)"></div>
+    <h1 class="textoGigante">{{ pokemon.name.toUpperCase() }} </h1>
+    <ion-img id="imagenPunzocortante" [src]="pokemon!.sprites.other?.['official-artwork']?.front_default"></ion-img> 
+    <div id="censo">
       <h3>#{{pokemon!.id.toString().padStart(3, '0')}}</h3>
       <h3>{{pokemon!.name.slice(0,1).toUpperCase() + pokemon!.name.slice(1)}}</h3>
       <div>
@@ -24,19 +27,38 @@
       </div> 
       
     </div>
+    <div class="otroIconoAbsolute">
+      <ion-icon slot="start" src="../../../assets/patterns/6x3.svg"></ion-icon>
+      <div class="pinturaDeFondo" *ngIf="!loading && pokemon" [ngStyle]="getPinturaFondo(pokemon.types[0].type.name, 0, 10)"></div>
+    </div>
   </div>
   
   <ion-list class="listaCondicional" color="" [ngStyle]="getColorFondo(pokemon.types[0].type.name)">
-    <div class="containerPaginas"><ion-button (click)="toggle('about')" fill="clear">About</ion-button>
-      <ion-icon class="pokeballIconoPaginas" *ngIf="paginaAbout" slot="start" src="../../../assets/patterns/pokeball.svg"></ion-icon>
-    </div>
-    <div class="containerPaginas"><ion-button (click)="toggle('stats')"fill="clear">Stats</ion-button>
-      <ion-icon class="pokeballIconoPaginas" *ngIf="paginaStats" slot="start" src="../../../assets/patterns/pokeball.svg"></ion-icon>
+    <div class="containerPaginas">
+      <ion-icon class="pokeballIconoPaginas" *ngIf="paginaAbout" slot="start" src="../../../assets/patterns/pokeball.svg" >
+      </ion-icon>
+      <div class="camara" [ngStyle]="getPinturaFondo(pokemon.types[0].type.name,270, 0)"></div>
 
+     <ion-button (click)="toggle('about')" fill="clear"><ion-label>About</ion-label></ion-button>
+    
+    </div>
+
+    <div class="containerPaginas">
+      <ion-icon class="pokeballIconoPaginas" *ngIf="paginaStats" slot="start" src="../../../assets/patterns/pokeball.svg">
+
+      </ion-icon>
+      <div class="camara" [ngStyle]="getPinturaFondo(pokemon.types[0].type.name,270, 0)"></div>
+
+      <ion-button (click)="toggle('stats')"fill="clear">Stats</ion-button>
     </div>
     <div class="containerPaginas">
+      <ion-icon class="pokeballIconoPaginas" *ngIf="paginaEvoluciones" slot="start" src="../../../assets/patterns/pokeball.svg">
+
+      </ion-icon>
+      <div class="camara" [ngStyle]="getPinturaFondo(pokemon.types[0].type.name,270, 0)"></div>
+
       <ion-button (click)="toggle('evolution')"fill="clear">Evolution</ion-button>
-      <ion-icon class="pokeballIconoPaginas" *ngIf="paginaEvoluciones" slot="start" src="../../../assets/patterns/pokeball.svg"></ion-icon>
+    
     </div>
     
     
@@ -45,15 +67,15 @@
   <div [ngStyle]="getColorFondo(pokemon.types[0].type.name)"> 
     <ion-item id="cartaInferior" >
       <ion-item class="componente" *ngIf="paginaAbout">
-        <app-about [id]="pokemon.id" *ngIf="especiePokemon" [pokemon] ="pokemon" [especiePokemon]="especiePokemon"></app-about>
+        <app-about [id]="pokemon.id" *ngIf="especiePokemon && tiposPokemon" [pokemon] ="pokemon" [especiePokemon]="especiePokemon" [colorTexto] = "getColor(pokemon.types[0].type.name)"></app-about>
       </ion-item>
       <ion-item class="componente" *ngIf="paginaStats">
         <div *ngIf="tiposPokemon">
-          <app-stats *ngIf="especiePokemon" [pokemon] ="pokemon" [especiePokemon]="especiePokemon" [tipoPokemon]="tiposPokemon" ></app-stats>
+          <app-stats *ngIf="especiePokemon" [pokemon] ="pokemon" [especiePokemon]="especiePokemon" [tipoPokemon]="tiposPokemon"  [colorTexto] = "getColor(pokemon.types[0].type.name)" ></app-stats>
         </div>
       </ion-item>
       <ion-item class="componente" *ngIf="paginaEvoluciones">
-        <app-evolution *ngIf="especiePokemon" [especiePokemon]="especiePokemon"></app-evolution>
+        <app-evolution *ngIf="especiePokemon" [especiePokemon]="especiePokemon"  [colorTexto] = "getColor(pokemon.types[0].type.name)"></app-evolution>
       </ion-item>
     </ion-item>
   </div>
