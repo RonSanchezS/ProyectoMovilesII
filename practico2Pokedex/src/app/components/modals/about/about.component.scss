@@ -1,0 +1,31 @@
+.tipoPokemon{
+    width: 2rem;
+    height: 2rem;
+    border-radius: 5px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    
+}
+.nosepass{
+    color: gray;
+    display: flex;
+    flex-direction: row;
+    
+}
+.listagap{
+    gap: 1rem;
+    display: flex;
+    flex-direction: row;
+}
+.labelIzquierdo{
+    width: 7rem;
+}
+.weaknesses{
+    display: flex;
+    flex-direction: row;
+    justify-content: start;
+    overflow: scroll;
+    gap: 5px;
+    
+}

@@ -1,119 +1,132 @@
 <ion-spinner name="circles" *ngIf="!especiePokemon"></ion-spinner>
-<ion-card  *ngIf="especiePokemon">
-    <ion-text class="text-centered">
-      <p>{{especiePokemon.flavor_text_entries[numeroDeEntradasDeDescripcion].flavor_text}}</p>
-    </ion-text>
-    <ion-text>
-      <h3>Pokedex data</h3>
-    </ion-text>
-    <ion-list>
-      <ion-item>
-        <ion-label>Species</ion-label>
-        <ion-label>{{especiePokemon.genera[numeroDeEntradasDeGenero].genus}}</ion-label>
-      </ion-item>
-      <ion-item>
-        <ion-label>Height</ion-label>
-        <ion-label>{{pokemon.height}}</ion-label>
-      </ion-item>
-      <ion-item>
-        <ion-label>Weight</ion-label>
-        <ion-label>{{pokemon.weight}}</ion-label>
-      </ion-item>
-      <ion-item>
-        <ion-label>Abilities</ion-label>
-        <ion-list>
-          <ion-item *ngFor="let item of pokemon.abilities">
-            <ion-label class="normabAbility" *ngIf="!item.is_hidden">{{item.ability.name}}</ion-label>
-            <ion-label class="hiddenAbility" *ngIf="item.is_hidden">{{item.ability.name}} (Habilidad Oculta)</ion-label>
-          </ion-item>
-        </ion-list>
-      </ion-item>
-      <ion-item *ngIf="relacionesDeDmg">
-        <ion-label>Weaknesses</ion-label>
-        <ion-list>
-          <ion-item class="tipoPokemon" *ngFor="let item of relacionesDeDmg">
-            <ion-icon [src]="'../../../../assets/types/'+item+'.svg'" > </ion-icon>
-          </ion-item>
-        </ion-list>
-      </ion-item>
-    </ion-list>
-    <ion-text>
-      <h3>Training</h3>
-    </ion-text>
-    <ion-list>
-      <ion-item>
-        <ion-label>EV Yield</ion-label>
-        <ion-list>
-          <ion-item *ngFor="let item of EV_YIELD">
-            <ion-label>{{item}}</ion-label>
-          </ion-item>
-        </ion-list>
-      </ion-item>
-      <ion-item>
-        <ion-label>Catch Rate</ion-label>
-        <ion-item>
-          <ion-label>{{especiePokemon.capture_rate}}
-          </ion-label>
-          <ion-label class="insights">(5.9% with pokeball, full HP.)</ion-label>
-
-        </ion-item>
-      </ion-item>
-      <ion-item>
-        <ion-label>Base Friendship</ion-label>
-        <ion-item>
-          <ion-label>{{especiePokemon.base_happiness}}
-          </ion-label>
-          <ion-label>(Normal)</ion-label>
-
-        </ion-item>
-      </ion-item>
-      <ion-item>
-        <ion-label>Base Exp</ion-label>
-        <ion-item>
-          <ion-label>{{pokemon.base_experience}}</ion-label>
-        </ion-item>
-      </ion-item>
-      <ion-item>
-        <ion-label>Growth Rate</ion-label>
-        <ion-item>
-          <ion-label>{{especiePokemon.growth_rate.name}}</ion-label>
-        </ion-item>
-      </ion-item>
-    </ion-list>
-    <ion-text>
-      <h3>Breeding</h3>
+  <ion-text class="text-centered">
+    <p>
+      {{
+        especiePokemon.flavor_text_entries[numeroDeEntradasDeDescripcion]
+          .flavor_text
+      }}
+    </p>
+  </ion-text>
+  <ion-text [ngStyle]="getColorTipo()">
+    <h3 class="subtitulo">Pokedex data</h3>
+  </ion-text>
+  <ion-list class="superLista">
+    <ion-item>
+      <ion-text class="labelIzquierdo">Species</ion-text>
       <ion-list>
-        <ion-item>
-          <ion-label>Gender</ion-label>
-          <ion-item >
-            <ion-label *ngFor="let item of GENDER_DIST">        
-              <ion-icon name="female-outline" *ngIf="item=='male'"></ion-icon>
-              <ion-icon name="female-outline" *ngIf="item=='female'"></ion-icon>
-              <ion-label *ngIf="item!='male' && item!='female'">
-                {{item}}
-              </ion-label>
-            </ion-label>
-          </ion-item>
-        </ion-item>
-        <ion-item>
-          <ion-label>Egg Groups</ion-label>
-          <ion-item>
-            <ion-label *ngFor="let item of especiePokemon.egg_groups">{{item.name}}</ion-label>
-          </ion-item>
-        </ion-item>
-        <ion-item>
-          <ion-label>Egg Cycles</ion-label>
-          <ion-label>{{especiePokemon.hatch_counter}} <ion-label class="insights">(hasta{{numeroDePasosNecesarios}} pasos necesarios)</ion-label></ion-label>
+        <ion-text class="labelDerecho">{{
+          especiePokemon.genera[numeroDeEntradasDeGenero].genus}}</ion-text>
+      </ion-list>
+    </ion-item>
+    <ion-item>
+      <ion-text class="labelIzquierdo">Height</ion-text>
+      <ion-list>
+        <ion-text class="labelDerecho">{{ pokemon.height }}</ion-text>
+      </ion-list>
+    </ion-item>
+    <ion-item>
+      <ion-text class="labelIzquierdo">Weight</ion-text>
+      <ion-list>
+        <ion-text class="labelDerecho">{{ pokemon.weight }}</ion-text>
+      </ion-list>
+    </ion-item>
+    <ion-item>
+      <ion-text class="labelIzquierdo">Abilities</ion-text>
+      <ion-list class="labelDerecho">
+        <ion-item *ngFor="let item of pokemon.abilities">
+          <ion-text class="normabAbility" *ngIf="!item.is_hidden">{{
+            item.ability.name
+          }}</ion-text>
+          <ion-text class="hiddenAbility" *ngIf="item.is_hidden"
+            >{{ item.ability.name }} (Habilidad Oculta)</ion-text>
         </ion-item>
       </ion-list>
-    </ion-text>
-    <ion-text>
-      <h3>Location</h3>
+    </ion-item>
+    <ion-item *ngIf="relacionesDeDmg">
+      <ion-text class="labelIzquierdo">Weaknesses</ion-text>
+      <ion-list class="weaknesses">
+        <div
+          class="tipoPokemon"
+          *ngFor="let item of relacionesDeDmg"
+          [ngStyle]="getColorTipoFondo(item)"
+        >
+          <ion-icon [src]="'assets/types/' + item + '.svg'"> </ion-icon>
+      </div>
+      </ion-list>
+    </ion-item>
+  </ion-list>
+  <ion-text [ngStyle]="getColorTipo()">
+    <h3 class="subtitulo">Training</h3>
+  </ion-text>
+  <ion-list class="superLista">
+    <ion-item>
+      <ion-text class="labelIzquierdo">EV Yield</ion-text>
       <ion-list>
-        <ion-item>
-          Lo sentimos, la api no tiene preparada esta opcion.
+        <ion-item *ngFor="let item of EV_YIELD">
+          <ion-text>{{ item }}</ion-text>
         </ion-item>
       </ion-list>
-    </ion-text>
-
-</ion-card>
+    </ion-item>
+    <ion-item class="superContainer">
+      <ion-text class="contenedor labelIzquierdo">Catch Rate</ion-text>
+      <ion-item class="nosepass">
+        <ion-text>{{ especiePokemon.capture_rate }} </ion-text>(5.9% with pokeball, full HP.)</ion-item>
+    </ion-item>
+    <ion-item>
+      <ion-text class="labelIzquierdo">Base Friendship</ion-text>
+      <ion-item class="nosepass">
+        <ion-text>{{ especiePokemon.base_happiness }} </ion-text>({{base_happiness}})
+      </ion-item>
+    </ion-item>
+    <ion-item>
+      <ion-text class="labelIzquierdo">Base Exp</ion-text>
+      <ion-item>
+        <ion-text>{{ pokemon.base_experience }}</ion-text>
+      </ion-item>
+    </ion-item>
+    <ion-item>
+      <ion-text class="labelIzquierdo">Growth Rate</ion-text>
+      <ion-item>
+        <ion-text>{{ especiePokemon.growth_rate.name }}</ion-text>
+      </ion-item>
+    </ion-item>
+  </ion-list>
+  <ion-text [ngStyle]="getColorTipo()">
+    <h3 class="subtitulo">Breeding</h3>
+  </ion-text>
+    <ion-list class="superLista">
+      <ion-item>
+        <ion-text class="labelIzquierdo">Gender</ion-text>
+        <ion-item class="gender">
+          <ion-text *ngFor="let item of GENDER_DIST">
+            <ion-icon name="female-outline" *ngIf="item == 'male'"></ion-icon>
+            <ion-icon name="female-outline" *ngIf="item == 'female'"></ion-icon>
+            <div *ngIf="item != 'male' && item != 'female'">
+              {{ item }}
+            </div>
+          </ion-text>
+        </ion-item>
+      </ion-item>
+      <ion-item>
+        <ion-text class="labelIzquierdo">Egg Groups</ion-text>
+        <ion-list  class="listagap">
+          <ion-item *ngFor="let item of especiePokemon.egg_groups">
+            <ion-text >{{item.name}}</ion-text>
+          </ion-item>
+        </ion-list>
+      </ion-item>
+      <ion-item>
+        <ion-text class="labelIzquierdo">Egg Cycles</ion-text>
+        <ion-item class="nosepass">
+          <ion-text>{{ especiePokemon.hatch_counter }}
+          </ion-text>
+          (hasta {{ numeroDePasosNecesarios }} pasos necesarios)</ion-item>
+    
+      </ion-item>
+    </ion-list>
+  <ion-text [ngStyle]="getColorTipo()">
+    <h3 class="subtitulo">Location</h3>
+    <ion-list>
+      <ion-item> Lo sentimos, la api no tiene preparada esta opcion. </ion-item>
+    </ion-list>
+  </ion-text>

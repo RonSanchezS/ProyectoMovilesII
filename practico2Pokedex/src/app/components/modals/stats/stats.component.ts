@@ -142,4 +142,10 @@ export class StatsComponent implements OnInit {
       });
     });
   }
+  @Input()
+  colorTexto: string = '#FFF555';
+
+  getColorTipo(){
+    return { 'color': `${this.colorTexto}` };
+  }
 }

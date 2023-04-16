@@ -1,7 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, HostListener, OnInit, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { IonicModule } from '@ionic/angular';
+import { IonImg, IonicModule } from '@ionic/angular';
 import { ActivatedRoute } from '@angular/router';
 import { PokeApiService } from 'src/app/services/poke-api.service';
 import { HttpClientModule } from '@angular/common/http';
@@ -16,7 +16,7 @@ import { Pokedex } from 'src/app/models/Pokedex';
   styleUrls: ['./pokemon-detalle.page.scss'],
   standalone: true,
   imports: [IonicModule, CommonModule, FormsModule, HttpClientModule, ModalsModule],
-  providers: [PokeApiService]
+  providers: [PokeApiService],
 })
 export class PokemonDetallePage implements OnInit {
   loading : boolean = true;
@@ -72,6 +72,48 @@ export class PokemonDetallePage implements OnInit {
 
   ngOnInit() {
   }
+  getColor(tipo: string) {
+    switch (tipo) {
+      case 'grass':
+        return '#62B957';
+      case 'fire':
+        return '#FD7D24';
+      case 'water':
+        return '#4A90DA';
+      case 'bug':
+        return '#8CB230';
+      case 'normal':
+        return '#9DA0AA';
+      case 'poison':
+        return '#A552CC';
+      case 'electric':
+        return '#F2D94E';
+      case 'ground':
+        return '#F78551';
+      case 'fairy':
+        return '#ED6EC7';
+      case 'fighting':
+        return '#D04164';
+      case 'psychic':
+        return '#EA5D60';
+      case 'rock':
+        return '#BAAB82';
+      case 'ghost':
+        return '#5F6DBC';
+      case 'ice':
+        return '#91D8DF';
+      case 'dragon':
+        return '#0C69C8';
+      case 'dark':
+        return '#595761';
+      case 'steel':
+        return '#417D9A';
+      case 'flying':
+        return '#748FC9';
+      default:
+        return 'white';
+    }
+}
   getColorTipo(tipo: string) {
     switch (tipo) {
       case 'grass':
@@ -198,7 +240,88 @@ export class PokemonDetallePage implements OnInit {
         return { '--background': 'white' };
     }
   }
+  getPinturaFondo(tipo : string, deg : number, porcentaje : number){
+    switch (tipo) {
+      case 'grass':
+        return {
+         'background': 'linear-gradient('+deg+'deg, rgb(139, 190, 138) '+porcentaje+'%, rgba(139, 190, 138, 0.43) 100%)'
+        };
+  case 'fire':
+    return {
+      'background': 'linear-gradient('+deg+'deg, rgb(255, 167, 86) '+porcentaje+'%, rgba(255, 167, 86, 0.43) 100%)'
+    };
+  case 'water':
+    return {
+      'background': 'linear-gradient('+deg+'deg, rgb(88, 171, 246) '+porcentaje+'%, rgba(88, 171, 246, 0.43) 100%)'
+    };
+  case 'bug':
+    return {
+      'background': 'linear-gradient('+deg+'deg, rgb(139, 214, 116) '+porcentaje+'%, rgba(139, 214, 116, 0.43) 100%)'
+    };
+  case 'normal':
+    return {
+      'background': 'linear-gradient('+deg+'deg, rgb(181, 185, 196) '+porcentaje+'%, rgba(181, 185, 196, 0.43) 100%)'
+    };
+  case 'poison':
+    return {
+      'background': 'linear-gradient('+deg+'deg, rgb(159, 110, 151) '+porcentaje+'%, rgba(159, 110, 151, 0.43) 100%)'
+    };
+  case 'electric':
+    return {
+      'background': 'linear-gradient('+deg+'deg, rgb(242, 203, 85) '+porcentaje+'%, rgba(242, 203, 85, 0.43) 100%)'
+    };
+  case 'ground':
+    return {
+      'background': 'linear-gradient('+deg+'deg, rgb(247, 133, 81) '+porcentaje+'%, rgba(247, 133, 81, 0.43) 100%)'
+    };
+  case 'fairy':
+    return {
+      'background': 'linear-gradient('+deg+'deg, rgb(235, 168, 195) '+porcentaje+'%, rgba(235, 168, 195, 0.43) 100%)'
+    };
+  case 'fighting':
+    return {
+      'background': 'linear-gradient('+deg+'deg, rgb(235, 73, 113) '+porcentaje+'%, rgba(235, 73, 113, 0.43) 100%)'
+    };
+  case 'psychic':
+    return {
+      'background': 'linear-gradient('+deg+'deg, rgb(255, 101, 104) '+porcentaje+'%, rgba(255, 101, 104, 0.43) 100%)'
+    };
+  case 'rock':
+    return {
+      'background': 'linear-gradient('+deg+'deg, rgb(212, 194, 148) '+porcentaje+'%, rgba(212, 194, 148, 0.43) 100%)'
+    };
+  case 'ghost':
+    return {
+      'background': 'linear-gradient('+deg+'deg, rgb(133, 112, 190) '+porcentaje+'%, rgba(133, 112, 190, 0.43) 100%)'
+    };
+  case 'ice':
+    return {
+      'background': 'linear-gradient('+deg+'deg, rgb(145, 216, 223) '+porcentaje+'%, rgba(145, 216, 223, 0.43) 100%)'
+    }
+  case 'dragon':
+    return {
+    'background': 'linear-gradient('+deg+'deg, rgb(115, 131, 185) '+porcentaje+'%, rgba(115, 131, 185, 0.43) 100%)'
+    };
+case 'dark':
+  return {
+    'background': 'linear-gradient('+deg+'deg, rgb(111, 110, 120) '+porcentaje+'%, rgba(111, 110, 120, 0.43) 100%)'
+  };
+case 'steel':
+  return {
+    'background': 'linear-gradient('+deg+'deg, rgb(76, 145, 178) '+porcentaje+'%, rgba(76, 145, 178, 0.43) 100%)'
+  };
+case 'flying':
+  return {
+    'background': 'linear-gradient('+deg+'deg, rgb(131, 162, 227) '+porcentaje+'%, rgba(131, 162, 227, 0.43) 100%)'
+  };
+default:
+  return {
+    'background': 'linear-gradient(0deg, white 50%, rgba(255, 255, 255, 0.43) 100%)'
+  };
+}}
   handlePokemonClick(pokemon: Pokemon) {
     console.log(`Se ha hecho clic en ${pokemon.name}`);
   }
+
+
 }

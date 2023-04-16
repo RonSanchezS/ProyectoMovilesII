@@ -81,4 +81,12 @@ export class EvolutionComponent implements OnInit {
     callback(); // Call the callback function once the loop is finished
   }
 
+
+  @Input()
+  colorTexto: string = '#FFF555';
+
+  getColorTipo(){
+    return { 'color': `${this.colorTexto}` };
+  }
+
 }
