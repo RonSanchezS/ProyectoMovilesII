@@ -8,10 +8,12 @@
     
 }
 .nosepass{
-    color: gray;
+    p{
+        color: gray;
+    }
     display: flex;
     flex-direction: row;
-    
+   
 }
 .listagap{
     gap: 1rem;

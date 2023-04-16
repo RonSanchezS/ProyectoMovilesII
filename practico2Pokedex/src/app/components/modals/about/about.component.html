@@ -70,12 +70,12 @@
     <ion-item class="superContainer">
       <ion-text class="contenedor labelIzquierdo">Catch Rate</ion-text>
       <ion-item class="nosepass">
-        <ion-text>{{ especiePokemon.capture_rate }} </ion-text>(5.9% with pokeball, full HP.)</ion-item>
+        <ion-text>{{ especiePokemon.capture_rate }} </ion-text><p>(5.9% with pokeball, full HP.)</p></ion-item>
     </ion-item>
     <ion-item>
       <ion-text class="labelIzquierdo">Base Friendship</ion-text>
       <ion-item class="nosepass">
-        <ion-text>{{ especiePokemon.base_happiness }} </ion-text>({{base_happiness}})
+        <ion-text>{{ especiePokemon.base_happiness }} </ion-text><p>({{base_happiness}})</p>
       </ion-item>
     </ion-item>
     <ion-item>
@@ -120,7 +120,7 @@
         <ion-item class="nosepass">
           <ion-text>{{ especiePokemon.hatch_counter }}
           </ion-text>
-          (hasta {{ numeroDePasosNecesarios }} pasos necesarios)</ion-item>
+          <p>(hasta {{ numeroDePasosNecesarios }} pasos necesarios)</p></ion-item>
     
       </ion-item>
     </ion-list>
