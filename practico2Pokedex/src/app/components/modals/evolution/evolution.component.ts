@@ -41,8 +41,8 @@ export class EvolutionComponent implements OnInit {
     
   }
 
-  onClick(){
-    alert("Aasdasdasd");
+  onClick(pokemon : Pokemon){
+    this.router.navigate(['/pokemon-detalle', pokemon.name]);
   }
 
   traerPokemon(){

@@ -5,10 +5,7 @@
   <ion-spinner name="bubbles" *ngIf="!evoChain">
   </ion-spinner>
   <ion-list class="listaPerorra" *ngIf="listaPokemonDeEvoluciones">
-      <ion-item *ngFor="let item of listaPokemonDeEvoluciones">
+      <ion-item *ngFor="let item of listaPokemonDeEvoluciones" (click)="onClick(item)">
         <ion-img [src]="item.sprites.front_default"></ion-img>
       </ion-item>
   </ion-list>
-<ion-button (click)="onClick()" expand="block" fill="clear" shape="round">
-  Click me
-</ion-button>

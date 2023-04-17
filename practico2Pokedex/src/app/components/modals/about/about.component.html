@@ -127,6 +127,6 @@
   <ion-text [ngStyle]="getColorTipo()">
     <h3 class="subtitulo">Location</h3>
     <ion-list>
-      <ion-item> Lo sentimos, la api no tiene preparada esta opcion. </ion-item>
+      <ion-item *ngFor="let item of locationEncounters"> {{item}} </ion-item>
     </ion-list>
   </ion-text>

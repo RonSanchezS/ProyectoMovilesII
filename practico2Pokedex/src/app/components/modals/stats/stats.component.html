@@ -3,39 +3,56 @@
 </ion-text>
 <ion-list>
   <ion-item *ngFor="let item of stats">
-    <ion-text> <p>{{item.statName}}</p></ion-text>
-    <ion-text>
-      <p>{{item.baseValue}}</p>
+    <ion-text class="statName">
+      <p>{{ item.statName }}</p></ion-text
+    >
+    <ion-text class="statBase">
+      <p>{{ item.baseValue }}</p>
     </ion-text>
-    <ion-progress-bar class="progressBar" [value]="min(item.baseValue, 120) / 120"></ion-progress-bar>
-    <ion-text>
-      <p>{{item.minStat}}</p>
+    <ion-progress-bar
+      class="progressBar"
+      [value]="min(item.baseValue, 120) / 120"
+      [ngStyle]="getColorForProgressBar()"
+    ></ion-progress-bar>
+    <ion-text class="statBase">
+      <p>{{ item.minStat }}</p>
     </ion-text>
-    <ion-text >
-      <p>{{item.maxStat}}</p>
+    <ion-text class="statBase">
+      <p>{{ item.maxStat }}</p>
     </ion-text>
   </ion-item>
   <ion-item>
-    <ion-label>Total:</ion-label>
-    <ion-label>{{sumaDeStats}}</ion-label>
-    <ion-label>min</ion-label>
-    <ion-label>max</ion-label>
+    <ion-text class="statName">Total:</ion-text>
+    <ion-text class="statBase">{{ sumaDeStats }}</ion-text>
+    <ion-progress-bar class="fakeProgressBar"></ion-progress-bar>
+    <ion-text class="statBase">min</ion-text>
+    <ion-text class="statBase">max</ion-text>
   </ion-item>
 </ion-list>
 <ion-text>
-  <p>The ranges shown on the right are for a level 100 Pokémon. Maximum values are based on a beneficial nature, 252 EVs, 31 IVs; minimum values are based on a hindering nature, 0 EVs, 0 IVs.</p>
+  <p>
+    The ranges shown on the right are for a level 100 Pokémon. Maximum values
+    are based on a beneficial nature, 252 EVs, 31 IVs; minimum values are based
+    on a hindering nature, 0 EVs, 0 IVs.
+  </p>
 </ion-text>
 <ion-text [ngStyle]="getColorTipo()">
   <h3>Type defenses</h3>
 </ion-text>
-<ion-text >
-  <p>The effectiveness of each type on {{pokemon.name}}</p>
+<ion-text>
+  <p>The effectiveness of each type on {{ pokemon.name }}</p>
 </ion-text>
-<ion-list *ngIf="tipoPokemon">
-  <ion-item *ngFor="let item of tipoPokemon.results">
-    <ion-icon [src]="'../../../../assets/types/'+item.name+'.svg'"></ion-icon>
-    <ion-item>
-      <ion-label>{{diccionarioDmg[item.name]}}</ion-label>
-    </ion-item>
-  </ion-item>
+<ion-list class="dosFilas" *ngIf="tipoPokemon">
+  <div class="dosFilasVerdaderas" *ngFor="let item of tipoPokemon.results">
+      <div id="holabola" [ngStyle]="getColorItem(item.name)">
+        <ion-icon
+        [src]="'../../../../assets/types/' + item.name + '.svg'"
+        
+      ></ion-icon>
+      </div>
+      <ion-text  >
+        <div> {{ diccionarioDmg[item.name] }}</div>
+       </ion-text>
+    </div>
+   
 </ion-list>

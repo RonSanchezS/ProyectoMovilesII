@@ -5,6 +5,7 @@ import { Pokemon } from '../models/Pokemon';
 import { Species } from '../models/Species';
 import { Tipo } from '../models/Tipo';
 import { EvolutionChainn } from '../models/EvolutionChain';
+import { Location } from '../models/LocationEncounters';
 
 @Injectable({
   providedIn: 'root'
@@ -48,5 +49,8 @@ export class PokeApiService {
   }
   getEvolutionChain(url : string){
     return this.http.get<EvolutionChainn>(url);
+  }
+  getUbicaciones(url : string){
+    return this.http.get<Location[]>(url);
   }
 }

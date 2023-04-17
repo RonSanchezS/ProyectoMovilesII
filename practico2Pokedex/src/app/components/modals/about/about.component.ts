@@ -115,8 +115,17 @@ export class AboutComponent implements OnInit {
   }
   ngOnInit() {
     this.getTipoPokemon();
+    this.getUbicaciones();
   }
-  
+  getUbicaciones(){
+    this.api.getUbicaciones(this.pokemon.location_area_encounters).subscribe((data) => {
+      console.log(data);
+      data.forEach((element) => {
+        this.locationEncounters.push(element.location_area.name);
+      });
+    }
+    );
+  }
   base_happiness : string = "";
   calcularBaseHappiness(){
     if(this.especiePokemon.base_happiness <= 5){

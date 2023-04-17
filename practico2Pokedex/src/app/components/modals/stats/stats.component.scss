@@ -1,0 +1,38 @@
+.statName{
+    width: 6rem;
+}
+.fakeProgressBar{
+    opacity: 0;
+}
+ion-progress-bar{
+    margin: 0px 10px;
+}
+.statBase{
+    width: 3rem;
+}
+.dosFilas{
+    display: flex;
+    flex-direction: row;
+    gap: 1rem;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+}
+.dosFilasVerdaderas{
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    width: 10%;
+    
+}
+#holabola{
+    width: 2rem;
+    height: 2rem;
+    border-radius: 5px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
