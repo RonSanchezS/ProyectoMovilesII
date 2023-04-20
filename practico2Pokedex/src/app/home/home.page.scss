@@ -75,7 +75,6 @@ ion-searchbar{
     height: 100%;
     position: absolute;
     pointer-events: none;
-    top: -33.33%;
     fill: gray;
     opacity: 0.2;
     &::before{
@@ -96,10 +95,19 @@ ion-searchbar{
     height: 100%;
     position: absolute;
     pointer-events: none;
-    top: -33.33%;
     fill: gray;
     opacity: 0.2;
   }
+  .listaInicio{
+    background : transparent;
+    ion-icon{
+      fill: white;
+    }
+  }
+}
+#pokebolaGigante{
+  top: -50%;
+
 }
 .pokeboll{
   position: absolute;
@@ -118,6 +126,9 @@ ion-searchbar{
   overflow: visible;
   ion-button{
     --background-activated : rgb(234,93,96);
+    height: 60px;
+    border-radius: 1rem;
+    margin: 10px 40px ;
   }
   overflow: visible;
 }
@@ -145,9 +156,22 @@ ion-searchbar{
   width: 3rem;
   height: 3rem;
 }
-
+.listaduo{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  ion-button{
+    flex: 1;
+    --background : rgb(234,93,96);
+  }
+  .boton-reset{
+    --background : 'grey'
+  }
+  
+}
 .toggleFilter{
   opacity: 0;
+  width: 3rem;
 }
 
 .noscroll{
@@ -166,7 +190,53 @@ ion-searchbar{
     padding-top: 7px;
   }
 }
+ion-range{
+  padding: 1rem;
+  --bar-background-active:  rgb(234,93,96);
+}
 #maincontainer{
   padding: 0px 20px;
 }
+.botonTramposo{
+  --background : rgb(234,93,96);
+  color: white;
+}
+.listaLoca{
+  gap: 1%;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+.cartaLoca{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 43%;
+  .genI{
+    display: flex;
+    margin-top: 1rem;
+  }
+  ion-icon{
+    position: absolute;
+    opacity: 0.115;
+    z-index: -5;
+  }
+  ion-text{
+  margin-bottom: 20px;
 
+  }
+}
+.iconoPokebola{
+  right: -10px;
+  bottom: -51px;
+  width: 110px;
+  height: 110px;
+
+}
+.iconoPattern{
+  left: 0;
+  top: 0;
+  width: 80px;
+  height: 35px;
+
+}

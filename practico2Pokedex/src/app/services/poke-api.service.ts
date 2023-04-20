@@ -3,9 +3,10 @@ import { HttpClient } from '@angular/common/http';
 import { Pokedex } from '../models/Pokedex';
 import { Pokemon } from '../models/Pokemon';
 import { Species } from '../models/Species';
-import { Tipo } from '../models/Tipo';
+import {  Tipo } from '../models/Tipo';
 import { EvolutionChainn } from '../models/EvolutionChain';
 import { Location } from '../models/LocationEncounters';
+import { GenPuesQueMas } from '../models/generation';
 
 @Injectable({
   providedIn: 'root'
@@ -19,13 +20,22 @@ export class PokeApiService {
   getPokemonPorEspeciesURL(element: string) {
     return this.http.get<Species>(element);
   }
-
+  getListaPokemonPorGeneracion(generacion : number) {
+    console.log("generacion: " + generacion);
+    return Promise.resolve(this.http.get<GenPuesQueMas>(`https://pokeapi.co/api/v2/generation/${generacion}`));
+  }
   getListaPokemon(number : number, offset : number) {
     return this.http.get<Pokedex>("https://pokeapi.co/api/v2/pokemon/?offset=offset&limit=number");
   }
   getListaPokemonPorEvento(event : any) {
     let offset = event.detail.value.lower-1;
     let number = event.detail.value.upper-1;
+    console.log("number: " + number + " offset: " + offset);
+    return this.http.get<Pokedex>(`https://pokeapi.co/api/v2/pokemon/?offset=${offset}&limit=${number}`);
+  }
+  getListaPokemonPorEvento2(min : number, max : number) {
+    let offset = min
+    let number = max
     console.log("number: " + number + " offset: " + offset);
     return this.http.get<Pokedex>(`https://pokeapi.co/api/v2/pokemon/?offset=${offset}&limit=${number}`);
   }

@@ -1,218 +1,354 @@
 <ion-content>
   <ion-list class="listaInicio">
-      <ion-icon slot="start" id="open-generation" [src]="'./assets/icons/generation.svg'"></ion-icon>
-      <ion-icon slot="start"  id="open-sort" [src]="'./assets/icons/sort.svg'"></ion-icon>
-      <ion-icon slot="start"  id="open-filter"  [src]="'./assets/icons/filter.svg'"></ion-icon>
+    <ion-icon slot="start" id="open-generation" [src]="'./assets/icons/generation.svg'"></ion-icon>
+    <ion-icon slot="start" id="open-sort" [src]="'./assets/icons/sort.svg'"></ion-icon>
+    <ion-icon slot="start" id="open-filter" [src]="'./assets/icons/filter.svg'"></ion-icon>
   </ion-list>
 
-    <ion-icon id="pokebolaGigante" src="../../assets/patterns/pokeball.svg"></ion-icon>
- 
+  <ion-icon id="pokebolaGigante" src="../../assets/patterns/pokeball.svg"></ion-icon>
+
   <div id="maincontainer">
     <ion-text>
       <h1>Pokedex</h1>
       <p>Search for Pokémon by name or using the National Pokédex number.</p>
     </ion-text>
-    <ion-searchbar placeholder="What Pokémon are you looking for?"(ionChange)="onSearchChange($event)" ></ion-searchbar>
+    <ion-searchbar placeholder="What Pokémon are you looking for?" (ionChange)="onSearchChange($event)"></ion-searchbar>
     <div *ngIf="loading">
       <ion-spinner name="bubbles"></ion-spinner>
     </div>
     <div *ngIf="!loading">
       <ion-list class="lista-cartas">
-        <ion-card class="card-pokemon" *ngFor="let resultado of listaMostrados"
-        (click)="pokemonDetalle(resultado.id)" [ngStyle]="getColorFondo(resultado.types[0].type.name)">
-          <ion-card-header class="contenidoizquierda" >
+        <ion-card class="card-pokemon" *ngFor="let resultado of listaMostrados" (click)="pokemonDetalle(resultado.id)"
+          [ngStyle]="getColorFondo(resultado.types[0].type.name)">
+          <ion-card-header class="contenidoizquierda">
             <ion-card-subtitle>#{{resultado.id.toString().padStart(3, '0')}}</ion-card-subtitle>
             <ion-card-title>{{resultado.name.slice(0,1).toUpperCase() + resultado.name.slice(1)}}</ion-card-title>
-            <div  class="listaElementos">
-              <ion-item class="listaTipos" *ngFor="let item of resultado.types" [ngStyle]="getColorTipo(item.type.name)" >
-                <ion-icon class="iconoTipo" [src]="'./assets/types/'+item.type.name+'.svg'" ></ion-icon>
-                <div class="resultadoTipo" [ngStyle]="getColorTipo(item.type.name)" >{{item.type.name}}</div>
+            <div class="listaElementos">
+              <ion-item class="listaTipos" *ngFor="let item of resultado.types"
+                [ngStyle]="getColorTipo(item.type.name)">
+                <ion-icon class="iconoTipo" [src]="'./assets/types/'+item.type.name+'.svg'"></ion-icon>
+                <div class="resultadoTipo" [ngStyle]="getColorTipo(item.type.name)">{{item.type.name}}</div>
               </ion-item>
             </div>
           </ion-card-header>
           <ion-card-content class="contenidoderecha">
-          <ion-img class="spritePokemon2" [src]="resultado.sprites.other?.['official-artwork']?.front_default" [alt]="'Imagen de '+resultado.name"></ion-img>
-          <ion-icon slot="start" class="pokeboll" [ngStyle]="getColorDecoracion(resultado.types[0].type.name)" src="./assets/patterns/pokeball.svg"></ion-icon>
-          <ion-icon slot="start" class="iconoRaro" [ngStyle]="getColorDecoracion(resultado.types[0].type.name)" src="./assets/patterns/6x3.svg"></ion-icon>
-        </ion-card-content>
+            <ion-img class="spritePokemon2" [src]="resultado.sprites.other?.['official-artwork']?.front_default"
+              [alt]="'Imagen de '+resultado.name"></ion-img>
+            <ion-icon slot="start" class="pokeboll" [ngStyle]="getColorDecoracion(resultado.types[0].type.name)"
+              src="./assets/patterns/pokeball.svg"></ion-icon>
+            <ion-icon slot="start" class="iconoRaro" [ngStyle]="getColorDecoracion(resultado.types[0].type.name)"
+              src="./assets/patterns/6x3.svg"></ion-icon>
+          </ion-card-content>
         </ion-card>
       </ion-list>
     </div>
   </div>
- 
-  
-  <ion-modal id="modal-filter" #modal trigger="open-filter" [initialBreakpoint]="0.25" [breakpoints]="[0, 0.25, 0.5, 1.0]">
+
+
+  <ion-modal id="modal-sort" #modal trigger="open-sort" [initialBreakpoint]="0.25" [breakpoints]="[0, 0.25, 0.5, 1.0]">
     <ng-template>
       <ion-content>
         <ion-card>
           <ion-text>
             <h3>Sort By</h3>
             <p>Use advanced search to explore Pokémon by type, weakness, height and more!</p>
-           </ion-text>
-           <ion-list class="listaSort">
-           <ion-button expand="block" fill="clear" shape="round">
-            Smallest number first
-           </ion-button>
-           <ion-button expand="block" fill="clear" shape="round">
-            Highest number first
-                 </ion-button>
-           <ion-button expand="block" fill="clear" shape="round">
-            A-Z
-           </ion-button>
-           <ion-button expand="block" fill="clear" shape="round">
-            Z-A
-           </ion-button>
-           </ion-list>
+          </ion-text>
+          <ion-list class="listaSort">
+            <ion-button expand="block" fill="clear" (click)="sort('minNumber')" *ngIf="!minNumberSort" >
+              Smallest number first
+            </ion-button>
+            <ion-button expand="block" class="botonTramposo" fill="clear" *ngIf="minNumberSort" (click)="sort('minNumber')">
+              Smallest number first
+            </ion-button>
+            <ion-button expand="block" fill="clear"  (click)="sort('maxNumber')" *ngIf="!maxNumberSort" >
+              Highest number first
+            </ion-button>
+            <ion-button expand="block" class="botonTramposo" fill="clear"  *ngIf="maxNumberSort" (click)="sort('maxNumber')">
+              Highest number first
+            </ion-button>
+            <ion-button expand="block" fill="clear"  (click)="sort('AZ')" *ngIf="!azSort" >
+              A-Z
+            </ion-button>
+            <ion-button expand="block" class="botonTramposo" fill="clear"  *ngIf="azSort" (click)="sort('AZ')">
+              A-Z
+            </ion-button>
+            <ion-button expand="block" fill="clear"  (click)="sort('ZA')"  *ngIf="!zaSort" >
+              Z-A
+            </ion-button>
+            <ion-button expand="block" class="botonTramposo" fill="clear"  *ngIf="zaSort" (click)="sort('ZA')" >
+              Z-A
+            </ion-button>
+          </ion-list>
         </ion-card>
-      
-       </ion-content>
-      
+
+      </ion-content>
+
     </ng-template>
   </ion-modal>
 
 
-  <ion-modal #modal trigger="open-sort" [initialBreakpoint]="0.25" [breakpoints]="[0, 0.25, 0.5, 1.0]">
+  <ion-modal #modal trigger="open-filter" [initialBreakpoint]="0.25" [breakpoints]="[0, 0.25, 0.5, 1.0]">
     <ng-template>
-     
+
       <ion-content>
         <ion-card>
           <ion-text>
             <h3>Filters</h3>
             <p>Use advanced search to explore Pokémon by type, weakness, height and more!</p>
-           </ion-text>
-           <ion-text>
+          </ion-text>
+          <ion-text>
             <h4>Filters</h4>
-           </ion-text>
-           <ion-list class="listaFiltros">
+          </ion-text>
+          <ion-list class="listaFiltros">
             <ion-item *ngFor="let item of tiposPokemon" class="itemFilter">
-              <div class="wrapperBoton" *ngIf="filtrosSet.has(item)" [ngStyle]="getColorFondo(item)" >
+              <div class="wrapperBoton" *ngIf="filtrosSet.has(item)" [ngStyle]="getColorFondo(item)">
                 <ion-icon class="iconoFiltro" slot="start" [src]='"./assets/types/"+item+".svg"'>
-              </ion-icon>
+                </ion-icon>
               </div>
-              <div class="wrapperBoton" *ngIf="!filtrosSet.has(item)"  >
-                <ion-icon class="iconoFiltro" slot="start" [ngStyle]="getColorDecoracion(item)" [src]='"./assets/types/"+item+".svg"'>
-              </ion-icon>
+              <div class="wrapperBoton" *ngIf="!filtrosSet.has(item)">
+                <ion-icon class="iconoFiltro" slot="start" [ngStyle]="getColorDecoracion(item)"
+                  [src]='"./assets/types/"+item+".svg"'>
+                </ion-icon>
               </div>
-              <ion-toggle class="toggleFilter" aria-label="Filtro de tipo de Pokemon para item" (ionChange)="toggleChanged($event, item)" [checked]="filtrosSet.has(item)"></ion-toggle>
+              <ion-button class="toggleFilter" aria-label="Filtro de tipo de Pokemon para item"
+                (click)="toggleChanged($event, item)"></ion-button>
             </ion-item>
-           </ion-list>
-           <ion-text>
+          </ion-list>
+          <ion-text>
             <h4>Weaknesses</h4>
-           </ion-text>
-           <ion-list class="listaFiltros">
+          </ion-text>
+          <ion-list class="listaFiltros">
             <ion-item *ngFor="let item of tiposPokemon" class="itemFilter">
-              <div class="wrapperBoton" *ngIf="filtrosSetDebilidades.has(item)" [ngStyle]="getColorFondo(item)" >
+              <div class="wrapperBoton" *ngIf="filtrosSetDebilidades.has(item)" [ngStyle]="getColorFondo(item)">
                 <ion-icon class="iconoFiltro" slot="start" [src]='"./assets/types/"+item+".svg"'>
-              </ion-icon>
+                </ion-icon>
               </div>
-              <div class="wrapperBoton" *ngIf="!filtrosSetDebilidades.has(item)"  >
-                <ion-icon class="iconoFiltro" slot="start" [ngStyle]="getColorDecoracion(item)" [src]='"./assets/types/"+item+".svg"'>
-              </ion-icon>
+              <div class="wrapperBoton" *ngIf="!filtrosSetDebilidades.has(item)">
+                <ion-icon class="iconoFiltro" slot="start" [ngStyle]="getColorDecoracion(item)"
+                  [src]='"./assets/types/"+item+".svg"'>
+                </ion-icon>
               </div>
-              <ion-toggle class="toggleFilter" aria-label="Filtro de tipo de Pokemon para item" (ionChange)="toggleChanged($event, item)" [checked]="filtrosSetDebilidades.has(item)"></ion-toggle>
+              <ion-button class="toggleFilter" aria-label="Filtro de tipo de Pokemon para item"
+                (click)="toggleChangedWeakness($event, item)"></ion-button>
             </ion-item>
-           </ion-list>
-           <ion-text>
+          </ion-list>
+          <ion-text>
             <h4>Heights</h4>
-           </ion-text>
-           <ion-list class="listaFiltros noscroll">
-            <ion-item  class="itemFilter">
-              <div class="wrapperBoton" *ngIf="filtrosSet.has('short')" [ngStyle]="getColorFondo('fairy')" >
-                <ion-icon class="iconoFiltro" slot="start"  src="../../assets/heights/short.svg">
-              </ion-icon>
+          </ion-text>
+          <ion-list class="listaFiltros noscroll">
+            <ion-item class="itemFilter">
+              <div class="wrapperBoton" *ngIf="filtrosSet.has('short')" [ngStyle]="getColorFondo('fairy')">
+                <ion-icon class="iconoFiltro" slot="start" src="../../assets/heights/short.svg">
+                </ion-icon>
               </div>
-              <div class="wrapperBoton" *ngIf="!filtrosSet.has('short')"  >
-                <ion-icon class="iconoFiltro" slot="start" [ngStyle]="getColorDecoracion('fairy')" src="../../assets/heights/short.svg">
-              </ion-icon>
+              <div class="wrapperBoton" *ngIf="!filtrosSet.has('short')">
+                <ion-icon class="iconoFiltro" slot="start" [ngStyle]="getColorDecoracion('fairy')"
+                  src="../../assets/heights/short.svg">
+                </ion-icon>
               </div>
-              <ion-toggle class="toggleFilter" aria-label="Filtro de tipo de Pokemon para item" (ionChange)="toggleChanged($event, 'short')" [checked]="filtrosSet.has('short')"></ion-toggle>
+              <ion-toggle class="toggleFilter" aria-label="Filtro de tipo de Pokemon para item"
+                (ionChange)="toggleChanged($event, 'short')" [checked]="filtrosSet.has('short')"></ion-toggle>
             </ion-item>
-            <ion-item  class="itemFilter">
-              <div class="wrapperBoton" *ngIf="filtrosSet.has('normalsize')" [ngStyle]="getColorFondo('fairy')" >
-                <ion-icon class="iconoFiltro" slot="start"  src="../../assets/heights/medium.svg">
-              </ion-icon>
+            <ion-item class="itemFilter">
+              <div class="wrapperBoton" *ngIf="filtrosSet.has('normalsize')" [ngStyle]="getColorFondo('fairy')">
+                <ion-icon class="iconoFiltro" slot="start" src="../../assets/heights/medium.svg">
+                </ion-icon>
               </div>
-              <div class="wrapperBoton" *ngIf="!filtrosSet.has('normalsize')"  >
-                <ion-icon class="iconoFiltro" slot="start" [ngStyle]="getColorDecoracion('fairy')" src="../../assets/heights/medium.svg">
-              </ion-icon>
+              <div class="wrapperBoton" *ngIf="!filtrosSet.has('normalsize')">
+                <ion-icon class="iconoFiltro" slot="start" [ngStyle]="getColorDecoracion('fairy')"
+                  src="../../assets/heights/medium.svg">
+                </ion-icon>
               </div>
-              <ion-toggle class="toggleFilter" aria-label="Filtro de tipo de Pokemon para item" (ionChange)="toggleChanged($event, 'normalsize')" [checked]="filtrosSet.has('normalsize')"></ion-toggle>
+              <ion-toggle class="toggleFilter" aria-label="Filtro de tipo de Pokemon para item"
+                (ionChange)="toggleChanged($event, 'normalsize')" [checked]="filtrosSet.has('normalsize')"></ion-toggle>
             </ion-item>
-            <ion-item  class="itemFilter">
-              <div class="wrapperBoton" *ngIf="filtrosSet.has('tall')" [ngStyle]="getColorFondo('fairy')" >
-                <ion-icon class="iconoFiltro" slot="start"  src="../../assets/heights/tall.svg">
-              </ion-icon>
+            <ion-item class="itemFilter">
+              <div class="wrapperBoton" *ngIf="filtrosSet.has('tall')" [ngStyle]="getColorFondo('fairy')">
+                <ion-icon class="iconoFiltro" slot="start" src="../../assets/heights/tall.svg">
+                </ion-icon>
               </div>
-              <div class="wrapperBoton" *ngIf="!filtrosSet.has('tall')"  >
-                <ion-icon class="iconoFiltro" slot="start" [ngStyle]="getColorDecoracion('fairy')" src="../../assets/heights/tall.svg">
-              </ion-icon>
+              <div class="wrapperBoton" *ngIf="!filtrosSet.has('tall')">
+                <ion-icon class="iconoFiltro" slot="start" [ngStyle]="getColorDecoracion('fairy')"
+                  src="../../assets/heights/tall.svg">
+                </ion-icon>
               </div>
-              <ion-toggle class="toggleFilter" aria-label="Filtro de tipo de Pokemon para item" (ionChange)="toggleChanged($event, 'tall')" [checked]="filtrosSet.has('tall')"></ion-toggle>
+              <ion-toggle class="toggleFilter" aria-label="Filtro de tipo de Pokemon para item"
+                (ionChange)="toggleChanged($event, 'tall')" [checked]="filtrosSet.has('tall')"></ion-toggle>
             </ion-item>
-           </ion-list>
-           <ion-text>
+          </ion-list>
+          <ion-text>
             <h4>Weights</h4>
-           </ion-text>
-           <ion-list class="listaFiltros noscroll">
-            
-            <ion-item  class="itemFilter">
-              <div class="wrapperBoton" *ngIf="filtrosSet.has('light')" [ngStyle]="getColorFondo('fairy')" >
-                <ion-icon class="iconoFiltro" slot="start"  src="../../assets/weights/light.svg">
-              </ion-icon>
+          </ion-text>
+          <ion-list class="listaFiltros noscroll">
+            <ion-item class="itemFilter">
+              <div class="wrapperBoton" *ngIf="filtrosSet.has('light')" [ngStyle]="getColorFondo('fairy')">
+                <ion-icon class="iconoFiltro" slot="start" src="../../assets/weights/light.svg">
+                </ion-icon>
               </div>
-              <div class="wrapperBoton" *ngIf="!filtrosSet.has('light')"  >
-                <ion-icon class="iconoFiltro" slot="start" [ngStyle]="getColorDecoracion('fairy')" src="../../assets/weights/light.svg">
-              </ion-icon>
+              <div class="wrapperBoton" *ngIf="!filtrosSet.has('light')">
+                <ion-icon class="iconoFiltro" slot="start" [ngStyle]="getColorDecoracion('fairy')"
+                  src="../../assets/weights/light.svg">
+                </ion-icon>
               </div>
-              <ion-toggle class="toggleFilter" aria-label="Filtro de tipo de Pokemon para item" (ionChange)="toggleChanged($event, 'light')" [checked]="filtrosSet.has('light')"></ion-toggle>
+              <ion-button class="toggleFilter" aria-label="Filtro de tipo de Pokemon para item"
+                (click)="toggleChanged($event, 'light')"></ion-button>
             </ion-item>
-            <ion-item  class="itemFilter">
-              <div class="wrapperBoton" *ngIf="filtrosSet.has('medium')" [ngStyle]="getColorFondo('fairy')" >
-                <ion-icon class="iconoFiltro" slot="start"  src="../../assets/weights/normal.svg">
-              </ion-icon>
+            <ion-item class="itemFilter">
+              <div class="wrapperBoton" *ngIf="filtrosSet.has('medium')" [ngStyle]="getColorFondo('fairy')">
+                <ion-icon class="iconoFiltro" slot="start" src="../../assets/weights/normal.svg">
+                </ion-icon>
               </div>
-              <div class="wrapperBoton" *ngIf="!filtrosSet.has('medium')"  >
-                <ion-icon class="iconoFiltro" slot="start" [ngStyle]="getColorDecoracion('fairy')" src="../../assets/weights/normal.svg">
-              </ion-icon>
+              <div class="wrapperBoton" *ngIf="!filtrosSet.has('medium')">
+                <ion-icon class="iconoFiltro" slot="start" [ngStyle]="getColorDecoracion('fairy')"
+                  src="../../assets/weights/normal.svg">
+                </ion-icon>
               </div>
-              <ion-toggle class="toggleFilter" aria-label="Filtro de tipo de Pokemon para item" (ionChange)="toggleChanged($event, 'medium')" [checked]="filtrosSet.has('medium')"></ion-toggle>
+              <ion-button class="toggleFilter" aria-label="Filtro de tipo de Pokemon para item"
+                (click)="toggleChanged($event, 'medium')"></ion-button>
             </ion-item>
-            <ion-item  class="itemFilter">
-              <div class="wrapperBoton" *ngIf="filtrosSet.has('heavy')" [ngStyle]="getColorFondo('fairy')" >
-                <ion-icon class="iconoFiltro" slot="start"  src="../../assets/weights/heavy.svg">
-              </ion-icon>
+            <ion-item class="itemFilter">
+              <div class="wrapperBoton" *ngIf="filtrosSet.has('heavy')" [ngStyle]="getColorFondo('fairy')">
+                <ion-icon class="iconoFiltro" slot="start" src="../../assets/weights/heavy.svg">
+                </ion-icon>
               </div>
-              <div class="wrapperBoton" *ngIf="!filtrosSet.has('heavy')"  >
-                <ion-icon class="iconoFiltro" slot="start" [ngStyle]="getColorDecoracion('fairy')" src="../../assets/weights/heavy.svg">
-              </ion-icon>
+              <div class="wrapperBoton" *ngIf="!filtrosSet.has('heavy')">
+                <ion-icon class="iconoFiltro" slot="start" [ngStyle]="getColorDecoracion('fairy')"
+                  src="../../assets/weights/heavy.svg">
+                </ion-icon>
               </div>
-              <ion-toggle class="toggleFilter" aria-label="Filtro de tipo de Pokemon para item" (ionChange)="toggleChanged($event, 'heavy')" [checked]="filtrosSet.has('heavy')"></ion-toggle>
+              <ion-button class="toggleFilter" aria-label="Filtro de tipo de Pokemon para item"
+                (click)="toggleChanged($event, 'heavy')"></ion-button>
             </ion-item>
-           
-           </ion-list>
-           <ion-text>
+
+          </ion-list>
+          <ion-text>
             <h4>Number Range</h4>
-           </ion-text>
-           <ion-range aria-label="Dual Knobs Range" [dualKnobs]="true" min="0" max="1279" [value]="{ lower: 1, upper: 100 }" (ionChange)="rangeChange($event)" ></ion-range>
-           <ion-list class="listaFiltros noscroll">
-            <ion-button  expand="block"  shape="round" (click)="cancel()">
+          </ion-text>
+          <ion-range aria-label="Dual Knobs Range" [dualKnobs]="true" min="0" max="1279"
+            [value]="{ lower: 1, upper: 100 }" (ionChange)="rangeChange($event)"></ion-range>
+          <ion-list class="listaduo">
+            <ion-button class="boton-reset" expand="block" (click)="cancel()">
               Reset
             </ion-button>
-            <ion-button  expand="block" shape="round" (click)="confirm()">
+            <ion-button class="boton-apply" expand="block" (click)="confirm()">
               Apply
             </ion-button>
           </ion-list>
         </ion-card>
-       
-       </ion-content>
+
+      </ion-content>
     </ng-template>
   </ion-modal>
 
-  
-  <ion-modal #modal trigger="open-generation" [initialBreakpoint]="0.25" [breakpoints]="[0, 0.25, 0.5, 0.75]">
+
+  <ion-modal #modal trigger="open-generation" [initialBreakpoint]="0.25" [breakpoints]="[0, 0.25, 0.5, 1]">
     <ng-template>
       <ion-content>
-       
+        <ion-card>
+          <ion-text>
+            <h3>Generations</h3>
+          </ion-text>
+          <ion-list class="listaLoca">
+            <ion-card class="cartaLoca" (click)="sortByGeneration(1)">
+              <ion-icon class="iconoPokebola" src="../../assets/patterns/pokeball.svg"></ion-icon>
+              <ion-icon class="iconoPattern" src="../../assets/patterns/6x3.svg"></ion-icon>
+              <div class="genI">
+                <ion-img src="./assets/generations/generation1/001.png"></ion-img>
+                <ion-img src="./assets/generations/generation1/004.png"></ion-img>
+                <ion-img src="./assets/generations/generation1/007.png"></ion-img>
+              </div>
+              <ion-text >
+                <h4>Generation I</h4>
+              </ion-text>
+            
+            </ion-card>
+            <ion-card class="cartaLoca" (click)="sortByGeneration(2)">
+              <ion-icon class="iconoPokebola" src="../../assets/patterns/pokeball.svg"></ion-icon>
+              <ion-icon class="iconoPattern" src="../../assets/patterns/6x3.svg"></ion-icon>
+              <div class="genI">
+                <ion-img src="../../assets/generations/generation2/152.png"></ion-img>
+                <ion-img src="./assets/generations/generation2/155.png"></ion-img>
+                <ion-img src="./assets/generations/generation2/158.png"></ion-img>
+              </div>
+              <ion-text >
+                <h4>Generation II</h4>
+              </ion-text>
+            </ion-card>
+            <ion-card class="cartaLoca" (click)="sortByGeneration(3)">
+              <ion-icon class="iconoPokebola" src="../../assets/patterns/pokeball.svg"></ion-icon>
+              <ion-icon class="iconoPattern" src="../../assets/patterns/6x3.svg"></ion-icon>
+              <div class="genI">
+                <ion-img src="../../assets/generations/generation3/252.png"></ion-img>
+                <ion-img src="./assets/generations/generation3/255.png"></ion-img>
+                <ion-img src="./assets/generations/generation3/258.png"></ion-img>
+              </div>
+              <ion-text >
+                <h4>Generation III</h4>
+              </ion-text>
+            </ion-card>
+            <ion-card class="cartaLoca" (click)="sortByGeneration(4)">
+              <ion-icon class="iconoPokebola" src="../../assets/patterns/pokeball.svg"></ion-icon>
+              <ion-icon class="iconoPattern" src="../../assets/patterns/6x3.svg"></ion-icon>
+              <div class="genI">
+                <ion-img src="../../assets/generations/generation4/387.png"></ion-img>
+                <ion-img src="./assets/generations/generation4/390.png"></ion-img>
+                <ion-img src="./assets/generations/generation4/393.png"></ion-img>
+              </div>
+              <ion-text >
+                <h4>Generation IV</h4>
+              </ion-text>
+            </ion-card>
+            <ion-card class="cartaLoca" (click)="sortByGeneration(5)">
+              <ion-icon class="iconoPokebola" src="../../assets/patterns/pokeball.svg"></ion-icon>
+              <ion-icon class="iconoPattern" src="../../assets/patterns/6x3.svg"></ion-icon>
+              <div class="genI">
+                <ion-img src="../../assets/generations/generation5/495.png"></ion-img>
+                <ion-img src="./assets/generations/generation5/498.png"></ion-img>
+                <ion-img src="./assets/generations/generation5/501.png"></ion-img>
+              </div>
+              <ion-text >
+                <h4>Generation V</h4>
+              </ion-text>
+            </ion-card>
+            <ion-card class="cartaLoca" (click)="sortByGeneration(6)">
+              <ion-icon class="iconoPokebola" src="../../assets/patterns/pokeball.svg"></ion-icon>
+              <ion-icon class="iconoPattern" src="../../assets/patterns/6x3.svg"></ion-icon>
+              <div class="genI">
+                <ion-img src="../../assets/generations/generation6/650.png"></ion-img>
+                <ion-img src="./assets/generations/generation6/653.png"></ion-img>
+                <ion-img src="./assets/generations/generation6/656.png"></ion-img>
+              </div>
+              <ion-text >
+                <h4>Generation VI</h4>
+              </ion-text>
+            </ion-card>
+            <ion-card class="cartaLoca" (click)="sortByGeneration(7)">
+              <ion-icon class="iconoPokebola" src="../../assets/patterns/pokeball.svg"></ion-icon>
+              <ion-icon class="iconoPattern" src="../../assets/patterns/6x3.svg"></ion-icon>
+              <div class="genI">
+                <ion-img src="../../assets/generations/generation7/722.png"></ion-img>
+                <ion-img src="./assets/generations/generation7/725.png"></ion-img>
+                <ion-img src="./assets/generations/generation7/728.png"></ion-img>
+              </div>
+              <ion-text >
+                <h4>Generation VII</h4>
+              </ion-text>
+            </ion-card>
+            <ion-card class="cartaLoca" (click)="sortByGeneration(8)">
+              <ion-icon class="iconoPokebola" src="../../assets/patterns/pokeball.svg"></ion-icon>
+              <ion-icon class="iconoPattern" src="../../assets/patterns/6x3.svg"></ion-icon>
+              <div class="genI">
+                <ion-img src="../../assets/generations/generation8/810.png"></ion-img>
+                <ion-img src="./assets/generations/generation8/813.png"></ion-img>
+                <ion-img src="./assets/generations/generation8/816.png"></ion-img>
+              </div>
+              <ion-text >
+                <h4>Generation IIX</h4>
+              </ion-text>
+            </ion-card>
+          </ion-list>
+        </ion-card>
+      
       </ion-content>
     </ng-template>
   </ion-modal>

@@ -4,8 +4,8 @@ import { PokeApiService } from '../services/poke-api.service';
 import { HttpClientModule } from '@angular/common/http';
 import { Pokedex, Result } from '../models/Pokedex';
 import { CommonModule } from '@angular/common';
-import { Pokemon } from '../models/Pokemon';
-import { forkJoin, switchMap } from 'rxjs';
+import { Pokemon, GenerationI } from '../models/Pokemon';
+import { forkJoin, min, switchMap } from 'rxjs';
 import { Router } from '@angular/router';
 import { ModalsModule } from '../components/modals/modals.module';
 
@@ -18,9 +18,7 @@ import { ModalsModule } from '../components/modals/modals.module';
   providers: [PokeApiService],
 })
 export class HomePage {
-
   @ViewChild(IonModal) modal: IonModal | undefined;
-
 
   pokedex: Pokedex | null = null;
 
@@ -207,38 +205,301 @@ export class HomePage {
   rangeChange(event: any) {
     console.log(event.detail);
     this.api
-    .getListaPokemonPorEvento(event)
-    .pipe(
-      switchMap((data) => {
-        this.pokedex = data;
-        this.pokedexResults = data.results;
-        return forkJoin(
-          data.results.map((pokemon) => {
-            return this.api.getPokemonIndividual(pokemon.url);
-          })
-        );
-      })
-    )
-    .subscribe((data) => {
-      this.listaPokemon = data;
-      this.listaMostrados = this.listaPokemon;
-      this.loading = false;
-    });
-   
+      .getListaPokemonPorEvento(event)
+      .pipe(
+        switchMap((data) => {
+          this.pokedex = data;
+          this.pokedexResults = data.results;
+          return forkJoin(
+            data.results.map((pokemon) => {
+              return this.api.getPokemonIndividual(pokemon.url);
+            })
+          );
+        })
+      )
+      .subscribe((data) => {
+        this.listaPokemon = data;
+        this.listaMostrados = this.listaPokemon;
+        this.loading = false;
+      });
   }
   cancel() {
-    if(this.modal)
-    this.modal.dismiss(null, 'cancel');
+    this.filtrosSet.clear();
   }
-  confirm(){
-    if(this.modal)
-    this.modal.dismiss(null, 'ok');
+  confirm() {
+    this.aplicarFiltros();
+  }
+  minNumberSort = false;
+  maxNumberSort = false;
+  azSort = false;
+  zaSort = false;
+  saludar() {
+    alert('Hola');
+  }
+
+  GenerationI = false;
+  GenerationII = false;
+  GenerationIII = false;
+  GenerationIV = false;
+  GenerationV = false;
+  GenerationVI = false;
+  GenerationVII = false;
+  GenerationVIII = false;
+
+  cancelarGeneraciones() {
+    this.GenerationI = false;
+    this.GenerationII = false;
+    this.GenerationIII = false;
+    this.GenerationIV = false;
+    this.GenerationV = false;
+    this.GenerationVI = false;
+    this.GenerationVII = false;
+    this.GenerationVIII = false;
+  }
+  sortByGeneration(gen: number) {
+    this.cancelarGeneraciones();
+    if (this.listaMostrados == null) {
+      console.log('ListaMostrados vacio');
+      return;
+    }
+    if (this.listaPokemon == null) {
+      console.log('ListaPokemon vacio');
+      return;
+    }
+    switch (gen) {
+      case 1:
+        this.GenerationI = true;
+        this.filtradoPorgeneracion(0, 151);
+        break;
+      case 2:
+        this.GenerationII = true;
+        this.filtradoPorgeneracion(151, 251);
+        break;
+      case 3:
+        this.GenerationIII = true;
+        this.filtradoPorgeneracion(251, 386);
+        break;
+      case 4:
+        this.GenerationIV = true;
+        this.filtradoPorgeneracion(386, 493);
+        break;
+      case 5:
+        this.GenerationV = true;
+        this.filtradoPorgeneracion(493, 650);
+        break;
+      case 6:
+        this.GenerationVI = true;
+        this.filtradoPorgeneracion(650, 722);
+        break;
+      case 7:
+        this.GenerationVII = true;
+        this.filtradoPorgeneracion(722, 809);
+        break;
+      case 8:
+        this.GenerationVIII = true;
+        this.filtradoPorgeneracion(809, 1073);
+        break;
+    }
+  }
+  filtradoPorgeneracion(gen: number, max: number) {
+    this.loading = true;
+    this.api
+      .getListaPokemonPorEvento2(gen, max)
+      .pipe(
+        switchMap((data) => {
+          this.pokedex = data;
+          this.pokedexResults = data.results;
+          return forkJoin(
+            data.results.map((pokemon) => {
+              return this.api.getPokemonIndividual(pokemon.url);
+            })
+          );
+        })
+      )
+      .subscribe((data) => {
+        this.listaPokemon = data;
+        this.listaMostrados = this.listaPokemon;
+        this.loading = false;
+      });
+  }
+  sort(tipoFiltro: string) {
+    if (this.listaMostrados == null) {
+      console.log('ListaMostrados vacio');
+      return;
+    }
+    switch (tipoFiltro) {
+      case 'minNumber':
+        this.listaMostrados.sort((a, b) => a.id - b.id);
+        this.minNumberSort = true;
+        this.maxNumberSort = false;
+        this.azSort = false;
+        this.zaSort = false;
+        break;
+      case 'maxNumber':
+        this.listaMostrados.sort((a, b) => b.id - a.id);
+        this.minNumberSort = false;
+        this.maxNumberSort = true;
+        this.azSort = false;
+        this.zaSort = false;
+        break;
+      case 'AZ':
+        this.listaMostrados.sort((a, b) => a.name.localeCompare(b.name));
+        this.minNumberSort = false;
+        this.maxNumberSort = false;
+        this.azSort = true;
+        this.zaSort = false;
+        break;
+      case 'ZA':
+        this.listaMostrados.sort((a, b) => b.name.localeCompare(a.name));
+        this.minNumberSort = false;
+        this.maxNumberSort = false;
+        this.azSort = false;
+        this.zaSort = true;
+        break;
+    }
+  }
+  aplicarFiltros() {
+    if (this.filtrosSet.size == 0) {
+      console.log('FiltroSet vacio');
+      this.listaMostrados = this.listaPokemon;
+      return;
+    }
+    if (this.listaPokemon == null) {
+      console.log('ListaPokemon vacio');
+      return;
+    }
+    this.listaMostrados = this.listaPokemon.filter((pokemon) => {
+      let tipos = pokemon.types.map((tipo) => tipo.type.name);
+      let resultado = tipos.filter((tipo) => this.filtrosSet.has(tipo));
+      return resultado.length > 0;
+    });
+    if (this.filtrosSet.has('light')) {
+      this.listaMostrados = this.listaMostrados.filter((pokemon) => {
+        return pokemon.weight < 100;
+      });
+    } else if (this.filtrosSet.has('heavy')) {
+      this.listaMostrados = this.listaMostrados.filter((pokemon) => {
+        return pokemon.weight > 200;
+      });
+    } else if (this.filtrosSet.has('medium')) {
+      this.listaMostrados = this.listaMostrados.filter((pokemon) => {
+        return pokemon.weight >= 100 && pokemon.weight <= 200;
+      });
+    }
+    if (this.filtrosSet.has('short')) {
+      this.listaMostrados = this.listaMostrados.filter((pokemon) => {
+        return pokemon.height < 5;
+      });
+    } else if (this.filtrosSet.has('tall')) {
+      this.listaMostrados = this.listaMostrados.filter((pokemon) => {
+        return pokemon.height > 20;
+      });
+    } else if (this.filtrosSet.has('normalsize')) {
+      this.listaMostrados = this.listaMostrados.filter((pokemon) => {
+        return pokemon.height >= 5 && pokemon.height <= 20;
+      });
+    }
+    console.log('gadasd');
+    console.log(this.listaMostrados);
   }
   filterByHeight(minHeight: number, maxHeight: number): void {
     if (this.listaPokemon) {
       this.listaMostrados = this.listaPokemon.filter(
         (pokemon) => pokemon.height >= minHeight && pokemon.height <= maxHeight
       );
+    }
+  }
+  toggleChangedWeakness(event: any, tipo: string) {
+    switch (tipo) {
+      case 'grass':
+        this.filtrosSet.add('fire');
+        this.filtrosSet.add('ice');
+        this.filtrosSet.add('poison');
+        this.filtrosSet.add('flying');
+        this.filtrosSet.add('bug');
+        break;
+      case 'fire':
+        this.filtrosSet.add('water');
+        this.filtrosSet.add('ground');
+        this.filtrosSet.add('rock');
+        break;
+      case 'water':
+        this.filtrosSet.add('electric');
+        this.filtrosSet.add('grass');
+        break;
+      case 'bug':
+        this.filtrosSet.add('fire');
+        this.filtrosSet.add('flying');
+        this.filtrosSet.add('rock');
+        break;
+      case 'normal':
+        this.filtrosSet.add('fighting');
+        break;
+      case 'poison':
+        this.filtrosSet.add('ground');
+        this.filtrosSet.add('psychic');
+        break;
+      case 'electric':
+        this.filtrosSet.add('ground');
+        break;
+      case 'ground':
+        this.filtrosSet.add('water');
+        this.filtrosSet.add('grass');
+        this.filtrosSet.add('ice');
+        break;
+      case 'fairy':
+        this.filtrosSet.add('poison');
+        this.filtrosSet.add('steel');
+        break;
+      case 'fighting':
+        this.filtrosSet.add('flying');
+        this.filtrosSet.add('psychic');
+        this.filtrosSet.add('fairy');
+        break;
+      case 'psychic':
+        this.filtrosSet.add('bug');
+        this.filtrosSet.add('ghost');
+        this.filtrosSet.add('dark');
+        break;
+      case 'flying':
+        this.filtrosSet.add('electric');
+        this.filtrosSet.add('ice');
+        this.filtrosSet.add('rock');
+        break;
+      case 'rock':
+        this.filtrosSet.add('fighting');
+        this.filtrosSet.add('ground');
+        this.filtrosSet.add('steel');
+        this.filtrosSet.add('water');
+        this.filtrosSet.add('grass');
+        break;
+      case 'ghost':
+        this.filtrosSet.add('ghost');
+        this.filtrosSet.add('dark');
+        break;
+      case 'ice':
+        this.filtrosSet.add('fighting');
+        this.filtrosSet.add('rock');
+        this.filtrosSet.add('steel');
+        this.filtrosSet.add('fire');
+        break;
+      case 'dragon':
+        this.filtrosSet.add('ice');
+        this.filtrosSet.add('dragon');
+        this.filtrosSet.add('fairy');
+        break;
+      case 'dark':
+        this.filtrosSet.add('fighting');
+        this.filtrosSet.add('bug');
+        this.filtrosSet.add('fairy');
+        break;
+      case 'steel':
+        this.filtrosSet.add('fighting');
+        this.filtrosSet.add('ground');
+        this.filtrosSet.add('fire');
+        break;
+      default:
+        break;
     }
   }
   filterByWeight(minWeight: number, maxWeight: number): void {
@@ -249,7 +510,6 @@ export class HomePage {
     }
   }
 
-
   onSearchChange(event: any) {
     if (this.listaPokemon) {
       this.listaMostrados = this.listaPokemon.filter((pokemon) =>
@@ -258,8 +518,54 @@ export class HomePage {
     }
   }
 
+  checkPeso(tipoPokemon: string) {
+    switch (tipoPokemon) {
+      case 'light':
+        this.filtrosSet.delete('medium');
+        this.filtrosSet.delete('heavy');
+        break;
+      case 'medium':
+        this.filtrosSet.delete('light');
+        this.filtrosSet.delete('heavy');
+        break;
+      case 'heavy':
+        this.filtrosSet.delete('light');
+        this.filtrosSet.delete('medium');
+        break;
+    }
+  }
+  checkAltura(tipoPokemon: string) {
+    switch (tipoPokemon) {
+      case 'short':
+        this.filtrosSet.delete('normalsize');
+        this.filtrosSet.delete('tall');
+        break;
+      case 'normalsize':
+        this.filtrosSet.delete('short');
+        this.filtrosSet.delete('tall');
+        break;
+      case 'tall':
+        this.filtrosSet.delete('short');
+        this.filtrosSet.delete('normalsize');
+        break;
+    }
+  }
   toggleChanged(event: any, tipoPokemon: string) {
-    if (
+    if (this.filtrosSet.has(tipoPokemon)) {
+      this.filtrosSet.delete(tipoPokemon);
+    } else {
+      this.checkPeso(tipoPokemon);
+      this.checkAltura(tipoPokemon);
+      this.filtrosSet.add(tipoPokemon);
+    }
+    console.log(this.filtrosSet);
+  }
+  segmentChanged(event: any) {
+    console.log('Selected segment:', event.detail.value);
+  }
+}
+/*
+  if (
       tipoPokemon == 'light' ||
       tipoPokemon == 'medium' ||
       tipoPokemon == 'heavy'
@@ -464,5 +770,4 @@ export class HomePage {
       }
       console.log(this.filtrosSet);
     }
-  }
-}
+*/
