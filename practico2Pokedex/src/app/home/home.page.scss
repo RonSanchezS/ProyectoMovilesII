@@ -1,15 +1,16 @@
 lista-cartas{
   overflow: visible;
+  
 }
 
 .card-pokemon{
-  height: 10rem;
+  height: 115px;
   border-radius: 1rem;
   display: flex;
-  gap: 5rem;
   position: relative;
   overflow: visible;
   contain: none;
+  margin-bottom: 30px;
 }
 .contenidoizquierda{
   display: flex;
@@ -33,26 +34,79 @@ lista-cartas{
 .spritePokemon2{
   position: absolute;
   right: 0%;
-  top: -2rem;
-  width: 12rem;
-  height: 12rem;
+  top: -15px;
+  width: 130px;
+  height: 130px;
   --overflow: visible;
   z-index: 100;
 }
 .iconoRaro{
   position: absolute;
-  right: 14rem;
+  right: 10rem;
   top: 0;
   width: 5rem;
   height: 5rem;
   --overflow: visible;
 }
+.searchbar{
+  background-color: rgb(242,242,242);
+  padding: 25px 20.5px;
+  width: 100%;
+  border-radius: 1rem;
+}
+.searchbar input[type=text]{
+  padding: 20px;
+  &::after{
+    content: '';
+    background-image: './../../assets/icons/search.svg';
+  }
+}
+ion-searchbar{
+  --background: rgb(242,242,242);
+  color: black;
+  border : 0px solid rgb(242,242,242);
+  box-shadow: none;
+ 
+}
+
+@media(prefers-color-scheme: light) {
+  #pokebolaGigante{
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    pointer-events: none;
+    top: -33.33%;
+    fill: gray;
+    opacity: 0.2;
+    &::before{
+      content: '';
+      width: 100%;
+      height: 100%;
+      position: absolute;
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, rgb(255, 255, 255) 100%);
+      z-index: 10;
+  
+    }
+   
+  }
+}
+@media(prefers-color-scheme: dark) {
+  #pokebolaGigante{
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    pointer-events: none;
+    top: -33.33%;
+    fill: gray;
+    opacity: 0.2;
+  }
+}
 .pokeboll{
   position: absolute;
-  left: -8rem;
-  width: 10rem;
-  height: 10rem;
-  --overflow: visible;
+  left: -5.2rem;
+  width: 115px;
+  height: 115px;
+  z-index: 0;
 }
 ion-searchbar{
   position: sticky;
@@ -100,5 +154,19 @@ ion-searchbar{
   overflow: hidden;
 }
 
-
+.listaInicio{
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  padding: 2rem;
+  gap:25px;
+  ion-icon{
+    width: 20px;
+    height: 20px;
+    padding-top: 7px;
+  }
+}
+#maincontainer{
+  padding: 0px 20px;
+}
 
