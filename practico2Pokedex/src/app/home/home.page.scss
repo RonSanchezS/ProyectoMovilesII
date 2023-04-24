@@ -128,7 +128,6 @@ ion-searchbar{
     --background-activated : rgb(234,93,96);
     height: 60px;
     border-radius: 1rem;
-    margin: 10px 40px ;
   }
   overflow: visible;
 }
@@ -202,10 +201,10 @@ ion-range{
   color: white;
 }
 .listaLoca{
-  gap: 1%;
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
+  overflow: visible;
 }
 .cartaLoca{
   display: flex;
@@ -226,6 +225,10 @@ ion-range{
 
   }
 }
+ion-list{
+  overflow: visible;
+  contain: none;
+}
 .iconoPokebola{
   right: -10px;
   bottom: -51px;
@@ -239,4 +242,15 @@ ion-range{
   width: 80px;
   height: 35px;
 
+}
+.generationbreak{
+  padding: 30px 40px;
+  contain: none;
+  overflow: visible;
+}
+*{
+  font-family: 'sf-pro-display-regular';
+}
+ion-card-title, h1, h2, h3, h4{
+  font-family: 'sf-pro-display-bold';
 }

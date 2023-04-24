@@ -374,32 +374,31 @@ export class HomePage {
       return resultado.length > 0;
     });
     if (this.filtrosSet.has('light')) {
-      this.listaMostrados = this.listaMostrados.filter((pokemon) => {
+      this.listaMostrados = this.listaPokemon.filter((pokemon) => {
         return pokemon.weight < 100;
       });
     } else if (this.filtrosSet.has('heavy')) {
-      this.listaMostrados = this.listaMostrados.filter((pokemon) => {
+      this.listaMostrados = this.listaPokemon.filter((pokemon) => {
         return pokemon.weight > 200;
       });
     } else if (this.filtrosSet.has('medium')) {
-      this.listaMostrados = this.listaMostrados.filter((pokemon) => {
+      this.listaMostrados = this.listaPokemon.filter((pokemon) => {
         return pokemon.weight >= 100 && pokemon.weight <= 200;
       });
     }
     if (this.filtrosSet.has('short')) {
-      this.listaMostrados = this.listaMostrados.filter((pokemon) => {
+      this.listaMostrados = this.listaPokemon.filter((pokemon) => {
         return pokemon.height < 5;
       });
     } else if (this.filtrosSet.has('tall')) {
-      this.listaMostrados = this.listaMostrados.filter((pokemon) => {
+      this.listaMostrados = this.listaPokemon.filter((pokemon) => {
         return pokemon.height > 20;
       });
     } else if (this.filtrosSet.has('normalsize')) {
-      this.listaMostrados = this.listaMostrados.filter((pokemon) => {
+      this.listaMostrados = this.listaPokemon.filter((pokemon) => {
         return pokemon.height >= 5 && pokemon.height <= 20;
       });
     }
-    console.log('gadasd');
     console.log(this.listaMostrados);
   }
   filterByHeight(minHeight: number, maxHeight: number): void {
@@ -410,97 +409,180 @@ export class HomePage {
     }
   }
   toggleChangedWeakness(event: any, tipo: string) {
-    switch (tipo) {
+    switch(tipo) {
       case 'grass':
-        this.filtrosSet.add('fire');
-        this.filtrosSet.add('ice');
-        this.filtrosSet.add('poison');
-        this.filtrosSet.add('flying');
-        this.filtrosSet.add('bug');
-        break;
-      case 'fire':
         this.filtrosSet.add('water');
         this.filtrosSet.add('ground');
         this.filtrosSet.add('rock');
+        this.filtrosSet.add('ground');
+        break;
+      case 'fire':
+        this.filtrosSet.add('grass');
+        this.filtrosSet.add('ice');
+        this.filtrosSet.add('bug');
         break;
       case 'water':
-        this.filtrosSet.add('electric');
-        this.filtrosSet.add('grass');
-        break;
-      case 'bug':
         this.filtrosSet.add('fire');
-        this.filtrosSet.add('flying');
+        this.filtrosSet.add('ground');
         this.filtrosSet.add('rock');
         break;
-      case 'normal':
-        this.filtrosSet.add('fighting');
-        break;
-      case 'poison':
-        this.filtrosSet.add('ground');
-        this.filtrosSet.add('psychic');
-        break;
       case 'electric':
-        this.filtrosSet.add('ground');
+        this.filtrosSet.add('water');
+        this.filtrosSet.add('flying');
+        break;
+      case 'rock':
+        this.filtrosSet.add('fire');
+        this.filtrosSet.add('ice');
+        this.filtrosSet.add('flying');
+        this.filtrosSet.add('bug');
         break;
       case 'ground':
         this.filtrosSet.add('water');
         this.filtrosSet.add('grass');
         this.filtrosSet.add('ice');
         break;
-      case 'fairy':
-        this.filtrosSet.add('poison');
-        this.filtrosSet.add('steel');
+      case 'flying':
+        this.filtrosSet.add('grass');
+        this.filtrosSet.add('fighting');
+        this.filtrosSet.add('bug');
         break;
       case 'fighting':
+        this.filtrosSet.add('rock');
+        this.filtrosSet.add('ice');
+        this.filtrosSet.add('normal');
+        break;
+      case 'ice':
+        this.filtrosSet.add('grass');
+        this.filtrosSet.add('ground');
         this.filtrosSet.add('flying');
+        this.filtrosSet.add('dragon');
+        break;
+      case 'bug':
+        this.filtrosSet.add('grass');
         this.filtrosSet.add('psychic');
+        this.filtrosSet.add('dark');
+        break;
+      case 'poison':
+        this.filtrosSet.add('grass');
         this.filtrosSet.add('fairy');
         break;
       case 'psychic':
-        this.filtrosSet.add('bug');
-        this.filtrosSet.add('ghost');
-        this.filtrosSet.add('dark');
-        break;
-      case 'flying':
-        this.filtrosSet.add('electric');
-        this.filtrosSet.add('ice');
-        this.filtrosSet.add('rock');
-        break;
-      case 'rock':
         this.filtrosSet.add('fighting');
-        this.filtrosSet.add('ground');
-        this.filtrosSet.add('steel');
-        this.filtrosSet.add('water');
-        this.filtrosSet.add('grass');
+        this.filtrosSet.add('poison');
         break;
       case 'ghost':
+        this.filtrosSet.add('psychic');
         this.filtrosSet.add('ghost');
-        this.filtrosSet.add('dark');
-        break;
-      case 'ice':
-        this.filtrosSet.add('fighting');
-        this.filtrosSet.add('rock');
-        this.filtrosSet.add('steel');
-        this.filtrosSet.add('fire');
-        break;
-      case 'dragon':
-        this.filtrosSet.add('ice');
-        this.filtrosSet.add('dragon');
-        this.filtrosSet.add('fairy');
         break;
       case 'dark':
-        this.filtrosSet.add('fighting');
-        this.filtrosSet.add('bug');
-        this.filtrosSet.add('fairy');
+        this.filtrosSet.add('psychic');
+        this.filtrosSet.add('ghost');
         break;
       case 'steel':
+        this.filtrosSet.add('ice');
+        this.filtrosSet.add('rock');
+        this.filtrosSet.add('fairy');
+        break;
+      case 'fairy':
         this.filtrosSet.add('fighting');
-        this.filtrosSet.add('ground');
-        this.filtrosSet.add('fire');
+        this.filtrosSet.add('dragon');
+        this.filtrosSet.add('dark');
         break;
       default:
+        console.log('Tipo no reconocido');
         break;
     }
+    // switch (tipo) {
+    //   case 'grass':
+    //     this.filtrosSet.add('fire');
+    //     this.filtrosSet.add('ice');
+    //     this.filtrosSet.add('poison');
+    //     this.filtrosSet.add('flying');
+    //     this.filtrosSet.add('bug');
+    //     break;
+    //   case 'fire':
+    //     this.filtrosSet.add('water');
+    //     this.filtrosSet.add('ground');
+    //     this.filtrosSet.add('rock');
+    //     break;
+    //   case 'water':
+    //     this.filtrosSet.add('electric');
+    //     this.filtrosSet.add('grass');
+    //     break;
+    //   case 'bug':
+    //     this.filtrosSet.add('fire');
+    //     this.filtrosSet.add('flying');
+    //     this.filtrosSet.add('rock');
+    //     break;
+    //   case 'normal':
+    //     this.filtrosSet.add('fighting');
+    //     break;
+    //   case 'poison':
+    //     this.filtrosSet.add('ground');
+    //     this.filtrosSet.add('psychic');
+    //     break;
+    //   case 'electric':
+    //     this.filtrosSet.add('ground');
+    //     break;
+    //   case 'ground':
+    //     this.filtrosSet.add('water');
+    //     this.filtrosSet.add('grass');
+    //     this.filtrosSet.add('ice');
+    //     break;
+    //   case 'fairy':
+    //     this.filtrosSet.add('poison');
+    //     this.filtrosSet.add('steel');
+    //     break;
+    //   case 'fighting':
+    //     this.filtrosSet.add('flying');
+    //     this.filtrosSet.add('psychic');
+    //     this.filtrosSet.add('fairy');
+    //     break;
+    //   case 'psychic':
+    //     this.filtrosSet.add('bug');
+    //     this.filtrosSet.add('ghost');
+    //     this.filtrosSet.add('dark');
+    //     break;
+    //   case 'flying':
+    //     this.filtrosSet.add('electric');
+    //     this.filtrosSet.add('ice');
+    //     this.filtrosSet.add('rock');
+    //     break;
+    //   case 'rock':
+    //     this.filtrosSet.add('fighting');
+    //     this.filtrosSet.add('ground');
+    //     this.filtrosSet.add('steel');
+    //     this.filtrosSet.add('water');
+    //     this.filtrosSet.add('grass');
+    //     break;
+    //   case 'ghost':
+    //     this.filtrosSet.add('ghost');
+    //     this.filtrosSet.add('dark');
+    //     break;
+    //   case 'ice':
+    //     this.filtrosSet.add('fighting');
+    //     this.filtrosSet.add('rock');
+    //     this.filtrosSet.add('steel');
+    //     this.filtrosSet.add('fire');
+    //     break;
+    //   case 'dragon':
+    //     this.filtrosSet.add('ice');
+    //     this.filtrosSet.add('dragon');
+    //     this.filtrosSet.add('fairy');
+    //     break;
+    //   case 'dark':
+    //     this.filtrosSet.add('fighting');
+    //     this.filtrosSet.add('bug');
+    //     this.filtrosSet.add('fairy');
+    //     break;
+    //   case 'steel':
+    //     this.filtrosSet.add('fighting');
+    //     this.filtrosSet.add('ground');
+    //     this.filtrosSet.add('fire');
+    //     break;
+    //   default:
+    //     break;
+    // }
   }
   filterByWeight(minWeight: number, maxWeight: number): void {
     if (this.listaPokemon) {

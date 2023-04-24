@@ -45,21 +45,13 @@ export class StatsComponent implements OnInit {
     for (let stat of baseStats) {
       let baseValue = stat.base_stat;
       let statName = stat.stat.name;
-      if (statName != 'hp') {
-        let maxStat = Math.floor(((2 * baseValue + maxIV + (maxEV / 4) * 100)/100)+5);
-        let minStat = Math.floor(((2 * baseValue + 0 + (0 / 4) * 100)/100)+5);
+      if (statName == 'hp') {
+        let maxStat = Math.floor((((2*baseValue+31+(252/4))*100)/100)+110);
+        let minStat = Math.floor((((2*baseValue+0+(0/4))*100)/100)+110);
         this.stats.push({ statName, maxStat, minStat, baseValue });
       } else {
-        let maxStat = Math.floor(
-          Math.floor(((baseValue * (2 * maxIV + maxEV)) / 100 + 5) * natureMod)
-        );
-        let minStat = Math.floor(
-          Math.floor(
-            Math.floor(
-              ((baseValue * (2 * maxIV + maxEV)) / 100 + 5) * natureDemod
-            ) * 0.9
-          )
-        );
+        let maxStat = Math.floor(((((2*baseValue+31+(252/4))*100)/100)+5)*natureMod);
+        let minStat = Math.floor(((((2*baseValue+0+(0/4))*100)/100)+5)*natureDemod);
         this.stats.push({ statName, maxStat, minStat, baseValue });
       }
     }

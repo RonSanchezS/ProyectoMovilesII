@@ -51,20 +51,17 @@ export class PokemonDetallePage implements OnInit {
   }
 
   toggle(topic : string){
+    this.paginaAbout = false;
+    this.paginaStats = false;
+    this.paginaEvoluciones = false;
     switch(topic){
       case 'about':
         this.paginaAbout = true;
-        this.paginaStats = false;
-        this.paginaEvoluciones = false;
         break;
       case 'stats':
-        this.paginaAbout = false;
         this.paginaStats = true;
-        this.paginaEvoluciones = false;
         break;
       case 'evolution':
-        this.paginaAbout = false;
-        this.paginaStats = false;
         this.paginaEvoluciones = true;
         break;
   }

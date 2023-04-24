@@ -234,3 +234,20 @@
     --ion-card-background: #1e1e1e;
   }
 }
+$font-family-base: 'sf-pro-display-bold';
+$font-family-base: 'sf-pro-display-medium';
+$font-family-base: 'sf-pro-display-regular';
+
+@font-face {
+  font-family: 'sf-pro-display-bold';
+  src: url('../assets/fonts/sf-pro-display-bold.ttf') format('truetype');
+}
+@font-face {
+  font-family: 'sf-pro-display-medium';
+  src: url('../assets/fonts/sf-pro-display-medium.ttf') format('truetype');
+}
+@font-face {
+  font-family: 'sf-pro-display-regular';
+  src: url('../assets/fonts/sf-pro-display-regular.ttf') format('truetype');
+}
+

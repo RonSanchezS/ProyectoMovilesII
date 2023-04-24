@@ -7,6 +7,12 @@
     align-items: center;
     
 }
+*{
+    font-family: 'sf-pro-display-regular';
+  }
+  h1, h2, h3, h4{
+    font-family: 'sf-pro-display-bold';
+  }
 .nosepass{
     p{
         color: gray;

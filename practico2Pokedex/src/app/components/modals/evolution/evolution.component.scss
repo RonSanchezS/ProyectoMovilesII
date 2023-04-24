@@ -1,8 +1,12 @@
 .listaPerorra{
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
-    z-index: 10;
-    width: 100%;
+display: flex;
+flex-direction: column;
+justify-content: space-around;
+align-items: center;
 }
+*{
+    font-family: 'sf-pro-display-regular';
+  }
+  h1, h2, h3, h4{
+    font-family: 'sf-pro-display-bold';
+  }

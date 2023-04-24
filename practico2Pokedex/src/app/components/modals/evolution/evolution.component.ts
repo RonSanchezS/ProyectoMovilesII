@@ -15,8 +15,6 @@ export class EvolutionComponent implements OnInit {
   @Input()
   especiePokemon!: Species;
 
-
-
   evoChain?: EvolutionChainn;
 
   primaryPokemon?: string;
@@ -28,50 +26,56 @@ export class EvolutionComponent implements OnInit {
   chain?: Chain;
 
   listaDeEvoluciones: Set<string> = new Set();
-  
-  listaPokemonDeEvoluciones : Set<Pokemon> = new Set();
 
-  listaDePokemonConObjetos : Record<string, Pokemon> = {};
+  listaPokemonDeEvoluciones: Set<Pokemon> = new Set();
+  listaDeRequerimientos: Set<string> = new Set();
+  listaDePokemonConObjetos: Record<string, Pokemon> = {};
 
+  miSetFinalOjala: Set<[Pokemon, number, Pokemon]> = new Set();
+  miSetAnteriorAlFinal: Set<[string, number, string]> = new Set();
 
-  constructor(private api: PokeApiService, private router : Router) {}
+  constructor(private api: PokeApiService, private router: Router) {}
 
   ngOnInit() {
     this.getEvoChain();
-    
   }
 
-  onClick(pokemon : Pokemon){
+  onClick(pokemon: Pokemon) {
     this.router.navigate(['/pokemon-detalle', pokemon.name]);
   }
 
-  traerPokemon(){
-    if(!this.isPokemonFetched){
-      this.listaDeEvoluciones.forEach(element => {
+  traerPokemon() {
+    if (!this.isPokemonFetched) {
+      this.listaDeEvoluciones.forEach((element) => {
         this.api.getPokemonIndividualDetallado(element).subscribe((data) => {
           this.listaPokemonDeEvoluciones.add(data);
-          });
-      }
-      );
+          console.log('Lista de pokemon');
+          console.log(this.listaPokemonDeEvoluciones);
+        });
+      });
     }
+
     this.isPokemonFetched = true;
-    
   }
   getEvoChain() {
-    this.api.getEvolutionChain(this.especiePokemon.evolution_chain.url).subscribe((data) => {
-      this.evoChain = data;
-      this.chain = this.evoChain.chain;
-      this.modifyEvoChain(this.chain, () => {
-        this.traerPokemon();
+    this.api
+      .getEvolutionChain(this.especiePokemon.evolution_chain.url)
+      .subscribe((data) => {
+        this.evoChain = data;
+        this.chain = this.evoChain.chain;
+        this.modifyEvoChain(this.chain, () => {
+          this.traerPokemon();
+        });
       });
-    });
   }
-  
+
   modifyEvoChain(evoChain: Chain, callback: () => void) {
+
     this.listaDeEvoluciones.add(evoChain.species.name);
     for (let i = 0; i < evoChain.evolves_to.length; i++) {
       this.listaDeEvoluciones.add(evoChain.species.name);
       const element = evoChain.evolves_to[i];
+
       if (element.evolves_to.length > 0) {
         this.modifyEvoChain(element, callback);
       } else {
@@ -81,12 +85,10 @@ export class EvolutionComponent implements OnInit {
     callback(); // Call the callback function once the loop is finished
   }
 
-
   @Input()
   colorTexto: string = '#FFF555';
 
-  getColorTipo(){
-    return { 'color': `${this.colorTexto}` };
+  getColorTipo() {
+    return { color: `${this.colorTexto}` };
   }
-
 }
